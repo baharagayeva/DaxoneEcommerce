@@ -1,4 +1,6 @@
 ﻿using Business.Concrete;
+using Core.Helpers.Constants;
+using Core.Helpers.Results.Concrete;
 using Entities.Concrete.TableModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -24,6 +26,28 @@ namespace DaxoneApi.Controllers
         {
            var data= CategoryManager.GetAll();
             return data.Data;
+        }
+
+        [HttpPost]
+        public Result Add(Category category)
+        {
+            CategoryManager.Add(category);
+            return new SuccessResult(CommonOperationMessages.DataAddedSuccessfully);
+        }
+
+        [HttpPut]
+        public Result Put(Category category)
+        {
+            CategoryManager.Update(category);
+            return new SuccessResult(CommonOperationMessages.DataAddedSuccessfully);
+        }
+
+        [HttpDelete]
+        public Result Delete(int id)
+        {
+            var category = CategoryManager.GetById(id);
+            CategoryManager.Delete(category.Data);
+            return new SuccessResult(CommonOperationMessages.DataAddedSuccessfully);
         }
     }
 }
