@@ -7,61 +7,58 @@ using Entities.Concrete.TableModels;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class CategoryManager : ICategoryService
+    public class SubCategoryManager : ISubCategoryService
     {
-        private readonly ICategoryDAL _categoryDAL;
-        private readonly IValidator<Category> _validationRules;
+        private readonly ISubCategoryDAL _subCategoryDAL;
+        private readonly IValidator<SubCategory> _validationRules;
 
-        public CategoryManager()
+        public SubCategoryManager(ISubCategoryDAL subCategoryDAL, IValidator<SubCategory> validationRules)
         {
-        }
-
-        public CategoryManager(ICategoryDAL categoryDAL, IValidator<Category> validationRules)
-        {
-            _categoryDAL = categoryDAL;
+            _subCategoryDAL = subCategoryDAL;
             _validationRules = validationRules;
         }
-        public IDataResult<List<string>> Add(Category category)
+        public IDataResult<List<string>> Add(SubCategory subCategory)
         {
-            var result = _validationRules.Validate(category);
+            var result = _validationRules.Validate(subCategory);
             if (!result.IsValid)
             {
                 return new ErrorDataResult<List<string>>(result.Errors.Select(x => x.PropertyName).ToList(), result.Errors.Select(x => x.ErrorMessage).ToList());
             }
-            _categoryDAL.Add(category);
+            _subCategoryDAL.Add(subCategory);
             return new SuccessDataResult<List<string>>(null, CommonOperationMessages.DataAddedSuccessfully);
         }
 
-        public IResult Delete(Category category)
+        public IResult Delete(SubCategory subCategory)
         {
-            _categoryDAL.Update(category);
+            _subCategoryDAL.Update(subCategory);
             return new SuccessResult(CommonOperationMessages.DataDeletedSuccessfully);
         }
 
-        public IDataResult<List<Category>> GetAll()
+        public IDataResult<List<SubCategory>> GetAll()
         {
-            return new SuccessDataResult<List<Category>>(_categoryDAL.GetAll(x => x.Deleted == 0));
+            return new SuccessDataResult<List<SubCategory>>(_subCategoryDAL.GetAll(x => x.Deleted == 0));
         }
 
-        public IDataResult<Category> GetById(int id)
+        public IDataResult<SubCategory> GetById(int id)
         {
-            return new SuccessDataResult<Category>(_categoryDAL.GetCategory(x => x.ID == id && x.Deleted == 0));
+            return new SuccessDataResult<SubCategory>(_subCategoryDAL.Get(x => x.ID == id && x.Deleted == 0));
         }
 
-        public IDataResult<List<string>> Update(Category category)
+        public IDataResult<List<string>> Update(SubCategory subCategory)
         {
-            var result = _validationRules.Validate(category);
+            var result = _validationRules.Validate(subCategory);
             if (!result.IsValid)
             {
                 return new ErrorDataResult<List<string>>(result.Errors.Select(x => x.PropertyName).ToList(), result.Errors.Select(x => x.ErrorMessage).ToList());
             }
-            _categoryDAL.Update(category);
+            _subCategoryDAL.Update(subCategory);
             return new SuccessDataResult<List<string>>(null, CommonOperationMessages.DataUpdatedSuccessfully);
         }
     }

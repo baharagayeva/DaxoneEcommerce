@@ -19,7 +19,7 @@ namespace DataAccess.Concrete.EntityFramework
         {
             _context = context;
         }
-        ProductStatus IProductStatusDAL.GetAll(Expression<Func<ProductStatus, bool>> predicate)
+        ProductStatus IProductStatusDAL.GetProductStatus(Expression<Func<ProductStatus, bool>> predicate)
         {
             return predicate is null
                  ?

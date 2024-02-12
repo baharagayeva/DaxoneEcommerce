@@ -13,55 +13,51 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class CategoryManager : ICategoryService
+    public class SeasonDiscountManager : ISeasonDiscountService
     {
-        private readonly ICategoryDAL _categoryDAL;
-        private readonly IValidator<Category> _validationRules;
+        private readonly ISeasonDiscountDAL _seasonDiscountDAL;
+        private readonly IValidator<SeasonDiscount> _validationRules;
 
-        public CategoryManager()
+        public SeasonDiscountManager(ISeasonDiscountDAL seasonDiscountDAL, IValidator<SeasonDiscount> validationRules)
         {
-        }
-
-        public CategoryManager(ICategoryDAL categoryDAL, IValidator<Category> validationRules)
-        {
-            _categoryDAL = categoryDAL;
+            _seasonDiscountDAL = seasonDiscountDAL;
             _validationRules = validationRules;
         }
-        public IDataResult<List<string>> Add(Category category)
+        public IDataResult<List<string>> Add(SeasonDiscount seasonDiscount)
         {
-            var result = _validationRules.Validate(category);
+            var result = _validationRules.Validate(seasonDiscount);
             if (!result.IsValid)
             {
                 return new ErrorDataResult<List<string>>(result.Errors.Select(x => x.PropertyName).ToList(), result.Errors.Select(x => x.ErrorMessage).ToList());
             }
-            _categoryDAL.Add(category);
+            _seasonDiscountDAL.Add(seasonDiscount);
             return new SuccessDataResult<List<string>>(null, CommonOperationMessages.DataAddedSuccessfully);
         }
 
-        public IResult Delete(Category category)
+        public IResult Delete(SeasonDiscount seasonDiscount)
         {
-            _categoryDAL.Update(category);
+            _seasonDiscountDAL.Update(seasonDiscount);
             return new SuccessResult(CommonOperationMessages.DataDeletedSuccessfully);
         }
 
-        public IDataResult<List<Category>> GetAll()
+        public IDataResult<List<SeasonDiscount>> GetAll()
         {
-            return new SuccessDataResult<List<Category>>(_categoryDAL.GetAll(x => x.Deleted == 0));
+            return new SuccessDataResult<List<SeasonDiscount>>(_seasonDiscountDAL.GetAll(x => x.Deleted == 0));
         }
 
-        public IDataResult<Category> GetById(int id)
+        public IDataResult<SeasonDiscount> GetById(int id)
         {
-            return new SuccessDataResult<Category>(_categoryDAL.GetCategory(x => x.ID == id && x.Deleted == 0));
+            return new SuccessDataResult<SeasonDiscount>(_seasonDiscountDAL.Get(x => x.ID == id && x.Deleted == 0));
         }
 
-        public IDataResult<List<string>> Update(Category category)
+        public IDataResult<List<string>> Update(SeasonDiscount seasonDiscount)
         {
-            var result = _validationRules.Validate(category);
+            var result = _validationRules.Validate(seasonDiscount);
             if (!result.IsValid)
             {
                 return new ErrorDataResult<List<string>>(result.Errors.Select(x => x.PropertyName).ToList(), result.Errors.Select(x => x.ErrorMessage).ToList());
             }
-            _categoryDAL.Update(category);
+            _seasonDiscountDAL.Update(seasonDiscount);
             return new SuccessDataResult<List<string>>(null, CommonOperationMessages.DataUpdatedSuccessfully);
         }
     }

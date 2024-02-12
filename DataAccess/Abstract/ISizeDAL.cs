@@ -11,6 +11,6 @@ namespace DataAccess.Abstract
 {
     public interface ISizeDAL : IRepository<Size>
     {
-        Size GetAll(Expression<Func<Size, bool>> predicate = null);
+        Size GetSize(Expression<Func<Size, bool>> predicate = null);
     }
 }

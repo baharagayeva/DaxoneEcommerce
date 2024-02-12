@@ -20,7 +20,7 @@ namespace DataAccess.Concrete.EntityFramework
             _context = context;
         }
 
-        public Size GetAll(Expression<Func<Size, bool>> predicate = null)
+        public Size GetSize(Expression<Func<Size, bool>> predicate = null)
         {
 
             return predicate is null

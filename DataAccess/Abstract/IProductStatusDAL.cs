@@ -11,6 +11,6 @@ namespace DataAccess.Abstract
 {
     public interface IProductStatusDAL : IRepository<ProductStatus>
     {
-        ProductStatus GetAll(Expression<Func<ProductStatus, bool>> predicate = null);
+        ProductStatus GetProductStatus(Expression<Func<ProductStatus, bool>> predicate = null);
     }
 }

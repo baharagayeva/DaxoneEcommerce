@@ -586,11 +586,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\Desktop\\DaxoneEcommerce\\Core\\Core.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Documents\\Codelandiya\\DaxoneEcommerceApi\\Core\\Core.csproj",
       "projectName": "Core",
-      "projectPath": "C:\\Users\\User\\Desktop\\DaxoneEcommerce\\Core\\Core.csproj",
+      "projectPath": "C:\\Users\\User\\Documents\\Codelandiya\\DaxoneEcommerceApi\\Core\\Core.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\Desktop\\DaxoneEcommerce\\Core\\obj\\",
+      "outputPath": "C:\\Users\\User\\Documents\\Codelandiya\\DaxoneEcommerceApi\\Core\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
