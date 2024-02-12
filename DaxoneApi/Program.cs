@@ -12,6 +12,13 @@ namespace DaxoneApi
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddCors(option =>
+            {
+                option.AddPolicy("cors", policy =>
+                {
+                    policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+                });
+            });
 
             var app = builder.Build();
 
@@ -23,6 +30,8 @@ namespace DaxoneApi
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("cors");
 
             app.UseAuthorization();
 

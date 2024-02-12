@@ -7,61 +7,58 @@ using Entities.Concrete.TableModels;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class CategoryManager : ICategoryService
+    public class ProductManager : IProductService
     {
-        private readonly ICategoryDAL _categoryDAL;
-        private readonly IValidator<Category> _validationRules;
+        private readonly IProductDAL _productDAL;
+        private readonly IValidator<Product> _validationRules;
 
-        public CategoryManager()
+        public ProductManager(IProductDAL productDAL, IValidator<Product> validationRules)
         {
-        }
-
-        public CategoryManager(ICategoryDAL categoryDAL, IValidator<Category> validationRules)
-        {
-            _categoryDAL = categoryDAL;
+            _productDAL = productDAL;
             _validationRules = validationRules;
         }
-        public IDataResult<List<string>> Add(Category category)
+        public IDataResult<List<string>> Add(Product product)
         {
-            var result = _validationRules.Validate(category);
+            var result = _validationRules.Validate(product);
             if (!result.IsValid)
             {
                 return new ErrorDataResult<List<string>>(result.Errors.Select(x => x.PropertyName).ToList(), result.Errors.Select(x => x.ErrorMessage).ToList());
             }
-            _categoryDAL.Add(category);
+            _productDAL.Add(product);
             return new SuccessDataResult<List<string>>(null, CommonOperationMessages.DataAddedSuccessfully);
         }
 
-        public IResult Delete(Category category)
+        public IResult Delete(Product product)
         {
-            _categoryDAL.Update(category);
+            _productDAL.Update(product);
             return new SuccessResult(CommonOperationMessages.DataDeletedSuccessfully);
         }
 
-        public IDataResult<List<Category>> GetAll()
+        public IDataResult<List<Product>> GetAll()
         {
-            return new SuccessDataResult<List<Category>>(_categoryDAL.GetAll(x => x.Deleted == 0));
+            return new SuccessDataResult<List<Product>>(_productDAL.GetAll(x => x.Deleted == 0));
         }
 
-        public IDataResult<Category> GetById(int id)
+        public IDataResult<Product> GetById(int id)
         {
-            return new SuccessDataResult<Category>(_categoryDAL.GetCategory(x => x.ID == id && x.Deleted == 0));
+            return new SuccessDataResult<Product>(_productDAL.Get(x => x.ID == id && x.Deleted == 0));
         }
 
-        public IDataResult<List<string>> Update(Category category)
+        public IDataResult<List<string>> Update(Product product)
         {
-            var result = _validationRules.Validate(category);
+            var result = _validationRules.Validate(product);
             if (!result.IsValid)
             {
                 return new ErrorDataResult<List<string>>(result.Errors.Select(x => x.PropertyName).ToList(), result.Errors.Select(x => x.ErrorMessage).ToList());
             }
-            _categoryDAL.Update(category);
+            _productDAL.Update(product);
             return new SuccessDataResult<List<string>>(null, CommonOperationMessages.DataUpdatedSuccessfully);
         }
     }

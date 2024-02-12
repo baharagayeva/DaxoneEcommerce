@@ -20,7 +20,7 @@ namespace DataAccess.Concrete.EntityFramework
             _context = context;
         }
 
-        public Color GetAll(Expression<Func<Color, bool>> predicate = null)
+        public Color GetColor(Expression<Func<Color, bool>> predicate = null)
         {
 
             return predicate is null

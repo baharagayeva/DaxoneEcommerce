@@ -13,55 +13,51 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class CategoryManager : ICategoryService
+    public class SizeManager : ISizeService
     {
-        private readonly ICategoryDAL _categoryDAL;
-        private readonly IValidator<Category> _validationRules;
+        private readonly ISizeDAL _sizeDAL;
+        private readonly IValidator<Size> _validationRules;
 
-        public CategoryManager()
+        public SizeManager(ISizeDAL sizeDAL, IValidator<Size> validationRules)
         {
-        }
-
-        public CategoryManager(ICategoryDAL categoryDAL, IValidator<Category> validationRules)
-        {
-            _categoryDAL = categoryDAL;
+            _sizeDAL = sizeDAL;
             _validationRules = validationRules;
         }
-        public IDataResult<List<string>> Add(Category category)
+        public IDataResult<List<string>> Add(Size size)
         {
-            var result = _validationRules.Validate(category);
+            var result = _validationRules.Validate(size);
             if (!result.IsValid)
             {
                 return new ErrorDataResult<List<string>>(result.Errors.Select(x => x.PropertyName).ToList(), result.Errors.Select(x => x.ErrorMessage).ToList());
             }
-            _categoryDAL.Add(category);
+            _sizeDAL.Add(size);
             return new SuccessDataResult<List<string>>(null, CommonOperationMessages.DataAddedSuccessfully);
         }
 
-        public IResult Delete(Category category)
+        public IResult Delete(Size size)
         {
-            _categoryDAL.Update(category);
+            _sizeDAL.Update(size);
             return new SuccessResult(CommonOperationMessages.DataDeletedSuccessfully);
         }
 
-        public IDataResult<List<Category>> GetAll()
+        public IDataResult<List<Size>> GetAll()
         {
-            return new SuccessDataResult<List<Category>>(_categoryDAL.GetAll(x => x.Deleted == 0));
+            return new SuccessDataResult<List<Size>>(_sizeDAL.GetAll(x => x.Deleted == 0));
         }
 
-        public IDataResult<Category> GetById(int id)
+        public IDataResult<Size> GetById(int id)
         {
-            return new SuccessDataResult<Category>(_categoryDAL.GetCategory(x => x.ID == id && x.Deleted == 0));
+            return new SuccessDataResult<Size>(_sizeDAL.GetSize(x => x.ID == id && x.Deleted == 0));
         }
 
-        public IDataResult<List<string>> Update(Category category)
+        public IDataResult<List<string>> Update(Size size)
         {
-            var result = _validationRules.Validate(category);
+            var result = _validationRules.Validate(size);
             if (!result.IsValid)
             {
                 return new ErrorDataResult<List<string>>(result.Errors.Select(x => x.PropertyName).ToList(), result.Errors.Select(x => x.ErrorMessage).ToList());
             }
-            _categoryDAL.Update(category);
+            _sizeDAL.Update(size);
             return new SuccessDataResult<List<string>>(null, CommonOperationMessages.DataUpdatedSuccessfully);
         }
     }

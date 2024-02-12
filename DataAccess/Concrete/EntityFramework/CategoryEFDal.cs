@@ -20,7 +20,7 @@ namespace DataAccess.Concrete.EntityFramework
             _context = context;
         }
 
-        public Category GetAllDATA(Expression<Func<Category, bool>> predicate = null)
+        public Category GetCategory(Expression<Func<Category, bool>> predicate = null)
         {
 
             return predicate is null

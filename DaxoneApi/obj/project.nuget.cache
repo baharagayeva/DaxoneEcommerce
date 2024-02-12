@@ -1,9 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "Z/Kb2FWL0HmJQEzj9NVduuh4/uUCYaCKu6Lxl5td/KzTlxvv5E+8FIPjTiZFAzG8nPaXG/2l9w0p1n+LC8czXQ==",
+  "dgSpecHash": "jC88+S4QtIrTHxdo+YCLedBVHw2ICrZa7tTFq8aibGEGy1Rb2Cmv4Pavx8NBOh000HrHVGc0lNzx+aYqa1QF3w==",
   "success": true,
   "projectFilePath": "C:\\Users\\User\\Documents\\Codelandiya\\DaxoneEcommerceApi\\DaxoneApi\\DaxoneApi.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\User\\.nuget\\packages\\fluentvalidation\\11.5.1\\fluentvalidation.11.5.1.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.0\\fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.5.1\\fluentvalidation.dependencyinjectionextensions.11.5.1.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\6.0.25\\microsoft.aspnetcore.cryptography.internal.6.0.25.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\6.0.25\\microsoft.aspnetcore.cryptography.keyderivation.6.0.25.nupkg.sha512",
@@ -58,5 +61,12 @@
     "C:\\Users\\User\\.nuget\\packages\\system.text.encoding.codepages\\4.7.0\\system.text.encoding.codepages.4.7.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\system.windows.extensions\\4.7.0\\system.windows.extensions.4.7.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\Users\\User\\Documents\\Codelandiya\\DaxoneEcommerceApi\\DaxoneApi\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }
