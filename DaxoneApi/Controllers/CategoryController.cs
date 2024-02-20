@@ -1,6 +1,8 @@
 ﻿using Business.Concrete;
+using Business.Validations;
 using Core.Helpers.Constants;
 using Core.Helpers.Results.Concrete;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete.TableModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +14,7 @@ namespace DaxoneApi.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        public CategoryManager CategoryManager = new CategoryManager();
+        public CategoryManager CategoryManager = new CategoryManager(new CategoryEFDal(new DaxoneDbContext()),new CategoryValidator());
 
         [HttpGet]
         public async Task<List<Category>> Get()

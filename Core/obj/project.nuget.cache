@@ -1,9 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "U6xzieEEgeR5weAodKXlxAv8Rj48U8ibbMysEqpQn5D/EfiU3+uLRK7dKEJLft3rh3CKiBmSh86w358h5vnutA==",
+  "dgSpecHash": "Dmnl5OMq+Umhku3sZe/NTQ/7o9Nmt+ZKk3rvB7pTbuTqGWAc66w01i6YAnfYCaL/KG9GRU6xtC9ESb+yabD6Bw==",
   "success": true,
   "projectFilePath": "C:\\Users\\User\\Documents\\Codelandiya\\DaxoneEcommerceApi\\Core\\Core.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\User\\.nuget\\packages\\fluentvalidation\\11.5.1\\fluentvalidation.11.5.1.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.0\\fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.5.1\\fluentvalidation.dependencyinjectionextensions.11.5.1.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.25\\microsoft.entityframeworkcore.6.0.25.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\6.0.25\\microsoft.entityframeworkcore.abstractions.6.0.25.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\6.0.25\\microsoft.entityframeworkcore.analyzers.6.0.25.nupkg.sha512",

@@ -18,10 +18,6 @@ namespace Business.Concrete
         private readonly ICategoryDAL _categoryDAL;
         private readonly IValidator<Category> _validationRules;
 
-        public CategoryManager()
-        {
-        }
-
         public CategoryManager(ICategoryDAL categoryDAL, IValidator<Category> validationRules)
         {
             _categoryDAL = categoryDAL;
@@ -46,6 +42,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Category>> GetAll()
         {
+            var data = _categoryDAL;
             return new SuccessDataResult<List<Category>>(_categoryDAL.GetAll(x => x.Deleted == 0));
         }
 
