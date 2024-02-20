@@ -22,6 +22,7 @@ namespace Business.Concrete
             _advertisementBannerDAL = advertisementBannerDAL;
             _validationRules = validationRules;
         }
+
         public IDataResult<List<string>> Add(AdvertisementBanner advertisementBanner)
         {
             var result = _validationRules.Validate(advertisementBanner);
@@ -41,7 +42,9 @@ namespace Business.Concrete
 
         public IDataResult<List<AdvertisementBanner>> GetAll()
         {
-            return new SuccessDataResult<List<AdvertisementBanner>>(_advertisementBannerDAL.GetAll(x => x.Deleted == 0));
+            var data = _advertisementBannerDAL.GetAll(x => x.Deleted == 0);
+            data.Reverse();
+            return new SuccessDataResult<List<AdvertisementBanner>>(data);
         }
 
         public IDataResult<AdvertisementBanner> GetById(int id)

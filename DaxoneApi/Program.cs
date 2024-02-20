@@ -1,3 +1,11 @@
+using Business.Abstract;
+using Business.Concrete;
+using Business.Validations;
+using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
+using Entities.Concrete.TableModels;
+using FluentValidation;
+
 namespace DaxoneApi
 {
     public class Program
@@ -19,9 +27,21 @@ namespace DaxoneApi
                     policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
                 });
             });
+            builder.Services.AddDbContext<DaxoneDbContext>()
+                            .AddIdentity<User, Role>()
+                            .AddEntityFrameworkStores<DaxoneDbContext>();
+
+            builder.Services.AddScoped<ICategoryDAL, CategoryEFDal>();
+            builder.Services.AddScoped<ICategoryService, CategoryManager>();
+            builder.Services.AddScoped<IValidator<Category>, CategoryValidator>();
+            builder.Services.AddScoped<IAdvertisementBannerDAL, AdvertisementBannerEFDal>();
+            builder.Services.AddScoped<IAdvertisementBannerService, AdvertisementBannerManager>();
+            builder.Services.AddScoped<IValidator<AdvertisementBanner>, AdvertisementBannerValidator>();
+
 
             var app = builder.Build();
 
+         
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
