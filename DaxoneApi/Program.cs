@@ -3,6 +3,8 @@ using Business.Concrete;
 using Business.Validations;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
+using DataAccess.Mapper;
+using Entities.Concrete.DTOs.CategoryDTOs;
 using Entities.Concrete.TableModels;
 using FluentValidation;
 
@@ -30,6 +32,7 @@ namespace DaxoneApi
             builder.Services.AddDbContext<DaxoneDbContext>()
                             .AddIdentity<User, Role>()
                             .AddEntityFrameworkStores<DaxoneDbContext>();
+            builder.Services.AddAutoMapper(typeof(Automapper));
 
             builder.Services.AddScoped<ICategoryDAL, CategoryEFDal>();
             builder.Services.AddScoped<ICategoryService, CategoryManager>();

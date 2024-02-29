@@ -42,7 +42,9 @@ namespace Business.Concrete
 
         public IDataResult<List<SeasonDiscount>> GetAll()
         {
-            return new SuccessDataResult<List<SeasonDiscount>>(_seasonDiscountDAL.GetAll(x => x.Deleted == 0));
+            var data = _seasonDiscountDAL.GetAll(x => x.Deleted == 0);
+            data.Reverse();
+            return new SuccessDataResult<List<SeasonDiscount>>(data);
         }
 
         public IDataResult<SeasonDiscount> GetById(int id)

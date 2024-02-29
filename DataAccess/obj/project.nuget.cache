@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "csZ1Bvu2L54oPzUSAO5d0D5wbdoyda2TxtxgZ8Qddqpa79tx2Sx9JPPfEv2xGAJYCgLcOOXciTLi9CwQ66vBNQ==",
+  "dgSpecHash": "oBi1QEUEvvqZtzfT9UDTF/Rg1LcOL+0Du5zaereSa+9o5lh9H91KlF75rvupR4swTd/ia1KtuuoyPNtEbfE7WQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\User\\Documents\\Codelandiya\\DaxoneEcommerceApi\\DataAccess\\DataAccess.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\User\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\fluentvalidation\\11.5.1\\fluentvalidation.11.5.1.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.0\\fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.5.1\\fluentvalidation.dependencyinjectionextensions.11.5.1.nupkg.sha512",

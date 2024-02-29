@@ -41,65 +41,45 @@ namespace DaxoneApi.Controllers
             var data = _advertisementBannerService.GetById(id);
             return data.Data;
         }
-        //[HttpGet("DownloadImages")]
-        //        public IActionResult DownloadImages([FromQuery(Name = "imgNames")] List<string> DownloadImages)
-        //        {
-        //            try
-        //            {
-        //                if (DownloadImages[0] == null)
-        //                {
-        //                    return Ok("Array is null");
-        //                }
-        //                else
-        //                {
-        //                    var SplitDataDownloadImages = DownloadImages[0].Split(",");
-        //                    IConfiguration configuration = new ConfigurationBuilder()
-        //                        .SetBasePath(Directory.GetCurrentDirectory())
-        //                        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-        //                        .Build();
-
-        //                    string cloudName = configuration["Password:CloudName"];
-        //                    string cloudinaryFolder = "Home/HomeLand";
-
-        //                    List<string> imageUrls = new List<string>();
-        //                    foreach (var imgName in SplitDataDownloadImages)
-        //                    {
-
-        //                        string imageUrl = $" https://res.cloudinary.com/{cloudName}/image/upload/c_scale,q_auto,f_auto/{imgName}";
-        //                        imageUrls.Add(imageUrl);
-        //                    }
-
-        //                    return Ok(new { Message = "Image URLs generated successfully", ImageUrls = imageUrls });
-        //                }
-
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                return BadRequest($"An error occurred: {ex.Message}");
-        //            }
-        //        }
 
         [HttpPost]
-        public Result Add([FromForm] AdvertisementBanner advertisementBanner,IFormFile img)
+        public IActionResult Add(AdvertisementBanner advertisementBanner)
         {
-            string cloudName = "dkmr0x3ul";
-            string apiKey = "482299463525874";
-            string apiSecret = "Wss6cQtBxQBamETqlhQZKnCa8-c";
-            string cloudinaryFolder = "Home/Daxone";
+            var validator = new AdvertisementBannerValidator();
+            var validationResult = validator.Validate(advertisementBanner);
 
-            var cloudinaryAccount = new Account(cloudName, apiKey, apiSecret);
-            var cloudinary = new Cloudinary(cloudinaryAccount);
-            string uniqueFilename = Guid.NewGuid().ToString("N");
-            string cloudinaryImagePath = $"{cloudinaryFolder}/{uniqueFilename}";
-
-            var uploadResult = UploadImageAndGetPath(cloudinary, img, cloudinaryImagePath);
-            advertisementBanner.ImgPath=cloudinaryImagePath;
-        
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(errors);
+            }
 
             _advertisementBannerService.Add(advertisementBanner);
 
-            return new SuccessResult(CommonOperationMessages.DataAddedSuccessfully);
+            return Ok(CommonOperationMessages.DataAddedSuccessfully);
         }
+
+
+        //[HttpPost]
+        //public Result Add([FromForm] AdvertisementBanner advertisementBanner,IFormFile img)
+        //{
+        //    string cloudName = "dkmr0x3ul";
+        //    string apiKey = "482299463525874";
+        //    string apiSecret = "Wss6cQtBxQBamETqlhQZKnCa8-c";
+        //    string cloudinaryFolder = "Home/Daxone";
+
+        //    var cloudinaryAccount = new Account(cloudName, apiKey, apiSecret);
+        //    var cloudinary = new Cloudinary(cloudinaryAccount);
+        //    string uniqueFilename = Guid.NewGuid().ToString("N");
+        //    string cloudinaryImagePath = $"{cloudinaryFolder}/{uniqueFilename}";
+
+        //    var uploadResult = UploadImageAndGetPath(cloudinary, img, cloudinaryImagePath);
+        //    advertisementBanner.ImgPath=$"https://res.cloudinary.com/dkmr0x3ul/image/upload/v1708592233/{cloudinaryImagePath}";
+
+        //    _advertisementBannerService.Add(advertisementBanner);
+
+        //    return new SuccessResult(CommonOperationMessages.DataAddedSuccessfully);
+        //}
 
         [HttpPut("{id}")]
         public Result Put(AdvertisementBanner advertisementBanner,int id)
@@ -123,7 +103,6 @@ namespace DaxoneApi.Controllers
             return new SuccessResult(CommonOperationMessages.DataDeletedSuccessfully);
         }
 
- 
         static string UploadImageAndGetPath(Cloudinary cloudinary, IFormFile image, string cloudinaryImagePath)
         {
             using (var stream = image.OpenReadStream())

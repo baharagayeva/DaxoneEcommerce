@@ -42,7 +42,9 @@ namespace Business.Concrete
 
         public IDataResult<List<Color>> GetAll()
         {
-            return new SuccessDataResult<List<Color>>(_colorDAL.GetAll(x => x.Deleted == 0));
+            var data = _colorDAL.GetAll(x => x.Deleted == 0);
+            data.Reverse();
+            return new SuccessDataResult<List<Color>>(data);
         }
 
         public IDataResult<Color> GetById(int id)

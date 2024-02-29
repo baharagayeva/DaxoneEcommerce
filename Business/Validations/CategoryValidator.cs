@@ -1,4 +1,5 @@
-﻿using Entities.Concrete.TableModels;
+﻿using Entities.Concrete.DTOs.CategoryDTOs;
+using Entities.Concrete.TableModels;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,6 @@ namespace Business.Validations
         {
           RuleFor(x => x.Name).NotEmpty().WithMessage(ValidationMessages.ValidationMessages.CanNotBeEmpty);  
         }
+
     }
 }
