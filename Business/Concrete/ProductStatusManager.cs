@@ -42,7 +42,9 @@ namespace Business.Concrete
 
         public IDataResult<List<ProductStatus>> GetAll()
         {
-            return new SuccessDataResult<List<ProductStatus>>(_productStatusDAL.GetAll(x => x.Deleted == 0));
+            var data = _productStatusDAL.GetAll(x => x.Deleted == 0);
+            data.Reverse();
+            return new SuccessDataResult<List<ProductStatus>>(data);
         }
 
         public IDataResult<ProductStatus> GetById(int id)

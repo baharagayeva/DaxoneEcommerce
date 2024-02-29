@@ -1,8 +1,10 @@
-﻿using Business.Concrete;
+﻿using Business.Abstract;
+using Business.Concrete;
 using Business.Validations;
 using Core.Helpers.Constants;
 using Core.Helpers.Results.Concrete;
 using DataAccess.Concrete.EntityFramework;
+using Entities.Concrete.DTOs.CategoryDTOs;
 using Entities.Concrete.TableModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,42 +16,71 @@ namespace DaxoneApi.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        public CategoryManager CategoryManager = new CategoryManager(new CategoryEFDal(new DaxoneDbContext()),new CategoryValidator());
+        private readonly ICategoryService _categoryService;
+
+        public CategoryController(ICategoryService categoryService)
+        {
+            _categoryService = categoryService;
+        }
 
         [HttpGet]
-        public async Task<List<Category>> Get()
+        public async Task<IActionResult> Get()
         {
-           var data= CategoryManager.GetAll();
-            return data.Data;
+            var result = _categoryService.GetAll();
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(result.Message);
+            }
         }
-        [Authorize]
-        [HttpGet("Admin")]
-        public async Task<List<Category>> GetAdmin()
+
+        [HttpGet("{id}")]
+        public async Task<Category> GetAdmin(int id)
         {
-           var data= CategoryManager.GetAll();
+            var data = _categoryService.GetById(id);
             return data.Data;
         }
 
         [HttpPost]
-        public Result Add(Category category)
+        public IActionResult Add(AddToCategoryDTO addToCategoryDTO)
         {
-            CategoryManager.Add(category);
-            return new SuccessResult(CommonOperationMessages.DataAddedSuccessfully);
+            Category category = new Category()
+            {
+                Name = addToCategoryDTO.Name,
+            };
+            var validator = new CategoryValidator();
+            var validationResult = validator.Validate(category);
+
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(errors);
+            }
+
+            _categoryService.Add(addToCategoryDTO);
+
+            return Ok(CommonOperationMessages.DataAddedSuccessfully);
         }
 
-        [HttpPut]
-        public Result Put(Category category)
+        [HttpPut("{id}")]
+        public Result Put(UpdateToCategoryDTO updateToCategoryDTO, int id)
         {
-            CategoryManager.Update(category);
-            return new SuccessResult(CommonOperationMessages.DataAddedSuccessfully);
+
+            updateToCategoryDTO.Id = id;
+            _categoryService.Update(updateToCategoryDTO);
+            return new SuccessResult(CommonOperationMessages.DataUpdatedSuccessfully);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public Result Delete(int id)
         {
-            var category = CategoryManager.GetById(id);
-            CategoryManager.Delete(category.Data);
-            return new SuccessResult(CommonOperationMessages.DataAddedSuccessfully);
+            var category = _categoryService.GetById(id).Data;
+            category.Deleted = category.ID;
+            _categoryService.Delete(category);
+            return new SuccessResult(CommonOperationMessages.DataDeletedSuccessfully);
         }
     }
 }

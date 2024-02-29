@@ -43,7 +43,9 @@ namespace Business.Concrete
 
         public IDataResult<List<SubCategory>> GetAll()
         {
-            return new SuccessDataResult<List<SubCategory>>(_subCategoryDAL.GetAll(x => x.Deleted == 0));
+            var data = _subCategoryDAL.GetAll(x => x.Deleted == 0);
+            data.Reverse();
+            return new SuccessDataResult<List<SubCategory>>(data);
         }
 
         public IDataResult<SubCategory> GetById(int id)
