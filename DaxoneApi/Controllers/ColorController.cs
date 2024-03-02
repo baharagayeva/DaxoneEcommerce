@@ -1,7 +1,11 @@
 ﻿using Business.Abstract;
+using Business.Validations;
 using Core.Helpers.Constants;
 using Core.Helpers.Results.Concrete;
+using Entities.Concrete.DTOs.CategoryDTOs;
+using Entities.Concrete.DTOs.ColorDTOs;
 using Entities.Concrete.TableModels;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DaxoneApi.Controllers
@@ -17,12 +21,19 @@ namespace DaxoneApi.Controllers
             _colorService = colorService;
         }
         [HttpGet]
-        public async Task<List<Color>> Get()
+        public async Task<IActionResult> Get()
         {
-
-            var data = _colorService.GetAll();
-            return data.Data;
+            var result = _colorService.GetAll();
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(result.Message);
+            }
         }
+
         [HttpGet("{id}")]
         public async Task<Color> GetAdmin(int id)
         {
@@ -31,30 +42,43 @@ namespace DaxoneApi.Controllers
         }
 
         [HttpPost]
-        public Result Add(Color color)
+        public IActionResult Add(AddToColorDTO addToColorDTO)
         {
-            _colorService.Add(color);
-            return new SuccessResult(CommonOperationMessages.DataAddedSuccessfully);
+            Color color = new Color()
+            {
+                Name = addToColorDTO.Name,
+                ColorCode = addToColorDTO.ColorCode,
+            };
+            var validator = new ColorValidator();
+            var validationResult = validator.Validate(color);
+
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(errors);
+            }
+
+            _colorService.Add(addToColorDTO);
+
+            return Ok(CommonOperationMessages.DataAddedSuccessfully);
         }
 
         [HttpPut("{id}")]
-        public Result Put(Color color, int id)
+        public IActionResult Put(UpdateToColorDTO updateToColorDTO, int id)
         {
 
-            var data = _colorService.GetById(id).Data;
-            data.Name = color.Name;
-            data.ColorCode = color.ColorCode;
-            _colorService.Update(data);
-            return new SuccessResult(CommonOperationMessages.DataUpdatedSuccessfully);
+            updateToColorDTO.Id = id;
+            _colorService.Update(updateToColorDTO);
+            return Ok(CommonOperationMessages.DataUpdatedSuccessfully);
         }
 
         [HttpDelete("{id}")]
-        public Result Delete(int id)
+        public IActionResult Delete(int id)
         {
             var color = _colorService.GetById(id).Data;
             color.Deleted = color.ID;
             _colorService.Delete(color);
-            return new SuccessResult(CommonOperationMessages.DataDeletedSuccessfully);
+            return Ok(CommonOperationMessages.DataDeletedSuccessfully);
         }
     }
 }

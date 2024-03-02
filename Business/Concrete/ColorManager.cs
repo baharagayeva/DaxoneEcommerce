@@ -1,8 +1,11 @@
-﻿using Business.Abstract;
+﻿using AutoMapper;
+using Business.Abstract;
 using Core.Helpers.Constants;
 using Core.Helpers.Results.Abstract;
 using Core.Helpers.Results.Concrete;
 using DataAccess.Abstract;
+using Entities.Concrete.DTOs.CategoryDTOs;
+using Entities.Concrete.DTOs.ColorDTOs;
 using Entities.Concrete.TableModels;
 using FluentValidation;
 using System;
@@ -17,14 +20,17 @@ namespace Business.Concrete
     {
         private readonly IColorDAL _colorDAL;
         private readonly IValidator<Color> _validationRules;
+        private readonly IMapper _mapper;
 
-        public ColorManager(IColorDAL colorDAL, IValidator<Color> validationRules)
+        public ColorManager(IColorDAL colorDAL, IValidator<Color> validationRules, IMapper mapper)
         {
             _colorDAL = colorDAL;
             _validationRules = validationRules;
+            _mapper = mapper;
         }
-        public IDataResult<List<string>> Add(Color color)
+        public IDataResult<List<string>> Add(AddToColorDTO addToColorDTO)
         {
+            Color color = _mapper.Map<Color>(addToColorDTO);
             var result = _validationRules.Validate(color);
             if (!result.IsValid)
             {
@@ -40,11 +46,11 @@ namespace Business.Concrete
             return new SuccessResult(CommonOperationMessages.DataDeletedSuccessfully);
         }
 
-        public IDataResult<List<Color>> GetAll()
+        public IDataResult<List<ListToColorDTO>> GetAll()
         {
-            var data = _colorDAL.GetAll(x => x.Deleted == 0);
-            data.Reverse();
-            return new SuccessDataResult<List<Color>>(data);
+            List<Color> colorList = _colorDAL.GetAll(x => x.Deleted == 0);
+            colorList.Sort((x, y) => y.ID.CompareTo(x.ID));
+            return new SuccessDataResult<List<ListToColorDTO>>(_mapper.Map<List<ListToColorDTO>>(colorList));
         }
 
         public IDataResult<Color> GetById(int id)
@@ -52,8 +58,9 @@ namespace Business.Concrete
             return new SuccessDataResult<Color>(_colorDAL.GetColor(x => x.ID == id && x.Deleted == 0));
         }
 
-        public IDataResult<List<string>> Update(Color color)
+        public IDataResult<List<string>> Update(UpdateToColorDTO updateToColorDTO)
         {
+            Color color = _mapper.Map<Color>(updateToColorDTO);
             var result = _validationRules.Validate(color);
             if (!result.IsValid)
             {

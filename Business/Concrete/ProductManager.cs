@@ -1,8 +1,11 @@
-﻿using Business.Abstract;
+﻿using AutoMapper;
+using Business.Abstract;
 using Core.Helpers.Constants;
 using Core.Helpers.Results.Abstract;
 using Core.Helpers.Results.Concrete;
 using DataAccess.Abstract;
+using Entities.Concrete.DTOs.ColorDTOs;
+using Entities.Concrete.DTOs.ProductDTOs;
 using Entities.Concrete.TableModels;
 using FluentValidation;
 using System;
@@ -18,14 +21,17 @@ namespace Business.Concrete
     {
         private readonly IProductDAL _productDAL;
         private readonly IValidator<Product> _validationRules;
+        private readonly IMapper _mapper;
 
-        public ProductManager(IProductDAL productDAL, IValidator<Product> validationRules)
+        public ProductManager(IProductDAL productDAL, IValidator<Product> validationRules, IMapper mapper)
         {
             _productDAL = productDAL;
             _validationRules = validationRules;
+            _mapper = mapper;
         }
-        public IDataResult<List<string>> Add(Product product)
+        public IDataResult<List<string>> Add(AddToProductDTO addToProductDTO)
         {
+            Product product = _mapper.Map<Product>(addToProductDTO);
             var result = _validationRules.Validate(product);
             if (!result.IsValid)
             {
@@ -41,11 +47,11 @@ namespace Business.Concrete
             return new SuccessResult(CommonOperationMessages.DataDeletedSuccessfully);
         }
 
-        public IDataResult<List<Product>> GetAll()
+        public IDataResult<List<ListToProductDTO>> GetAll()
         {
-            var data = _productDAL.GetAll(x => x.Deleted == 0);
-            data.Reverse();
-            return new SuccessDataResult<List<Product>>(data);
+            List<Product> productList = _productDAL.GetAll(x => x.Deleted == 0);
+            productList.Sort((x, y) => y.ID.CompareTo(x.ID));
+            return new SuccessDataResult<List<ListToProductDTO>>(_mapper.Map<List<ListToProductDTO>>(productList));
         }
 
         public IDataResult<Product> GetById(int id)
@@ -53,8 +59,9 @@ namespace Business.Concrete
             return new SuccessDataResult<Product>(_productDAL.Get(x => x.ID == id && x.Deleted == 0));
         }
 
-        public IDataResult<List<string>> Update(Product product)
+        public IDataResult<List<string>> Update(UpdateToProductDTO updateToProductDTO)
         {
+            Product product = _mapper.Map<Product>(updateToProductDTO);
             var result = _validationRules.Validate(product);
             if (!result.IsValid)
             {

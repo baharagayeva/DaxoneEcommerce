@@ -1,37 +1,30 @@
 ﻿using Business.Abstract;
-using Business.Concrete;
 using Business.Validations;
-using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using CloudinaryDotNet;
 using Core.Helpers.Constants;
-using Core.Helpers.Results.Concrete;
-using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete.TableModels;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using static System.Net.Mime.MediaTypeNames;
+using Entities.Concrete.DTOs.ColorDTOs;
+using Entities.Concrete.DTOs.ProductDTOs;
+using FluentValidation;
 
 namespace DaxoneApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdvertisementBannerController : ControllerBase
+    public class ProductController : Controller
     {
-        private readonly IAdvertisementBannerService _advertisementBannerService;
+        private readonly IProductService _productService;
 
-        public AdvertisementBannerController(IAdvertisementBannerService advertisementBannerService)
+        public ProductController(IProductService productService)
         {
-            _advertisementBannerService = advertisementBannerService;
-
+            _productService = productService;
         }
-
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = _advertisementBannerService.GetAll();
+            var result = _productService.GetAll();
             if (result.Success)
             {
                 return Ok(result.Data);
@@ -43,17 +36,30 @@ namespace DaxoneApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<AdvertisementBanner> GetAdmin(int id)
+        public async Task<Product> GetAdmin(int id)
         {
-            var data = _advertisementBannerService.GetById(id);
+            var data = _productService.GetById(id);
             return data.Data;
         }
 
         [HttpPost]
-        public IActionResult Add([FromForm] AdvertisementBanner advertisementBanner, IFormFile img)
+        public IActionResult Add([FromForm] AddToProductDTO addToProductDTO, IFormFile img)
         {
-            var validator = new AdvertisementBannerValidator();
-            var validationResult = validator.Validate(advertisementBanner);
+            Product product = new Product()
+            {
+                Name = addToProductDTO.Name,
+                Description = addToProductDTO.Description,
+                CategoryID = addToProductDTO.CategoryID,
+                IsSale = addToProductDTO.IsSale,
+                Price = addToProductDTO.Price,
+                SalePrice = addToProductDTO.SalePrice,
+                ImgPath = addToProductDTO.ImgPath,
+                Model = addToProductDTO.Model,
+                StockCount = addToProductDTO.StockCount,
+            };
+
+            var validator = new ProductValidator();
+            var validationResult = validator.Validate(product);
 
             if (!validationResult.IsValid)
             {
@@ -62,8 +68,8 @@ namespace DaxoneApi.Controllers
             }
 
             var data = CloudinaryPost(img);
-            advertisementBanner.ImgPath = data;
-            _advertisementBannerService.Add(advertisementBanner);
+            addToProductDTO.ImgPath = data;
+            _productService.Add(addToProductDTO);
 
             return Ok(CommonOperationMessages.DataAddedSuccessfully);
         }
@@ -93,24 +99,30 @@ namespace DaxoneApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put([FromForm] AdvertisementBanner advertisementBanner,IFormFile image, int id)
+        public IActionResult Put([FromForm] UpdateToProductDTO updateToProductDTO, IFormFile image, int id)
         {
 
-            var item = _advertisementBannerService.GetById(id).Data;
+            var item = _productService.GetById(id).Data;
             if (image != null)
             {
                 var oldlink = item.ImgPath;
                 CloudinaryDelete(oldlink);
                 var data = CloudinaryPost(image);
-                advertisementBanner.ImgPath = data;
+                updateToProductDTO.ImgPath = data;
             }
 
-            item.ImgPath = advertisementBanner.ImgPath;
-            item.Discount = advertisementBanner.Discount;
-            item.Description = advertisementBanner.Description;
-            item.Title = advertisementBanner.Title;
+            item.ID = id;
+            item.Name = updateToProductDTO.Name;
+            item.Description = updateToProductDTO.Description;
+            item.CategoryID = updateToProductDTO.CategoryID;
+            item.IsSale = updateToProductDTO.IsSale;
+            item.Price = updateToProductDTO.Price;
+            item.SalePrice = updateToProductDTO.SalePrice;
+            item.ImgPath = updateToProductDTO.ImgPath;
+            item.Model = updateToProductDTO.Model;
+            item.StockCount = updateToProductDTO.StockCount;
 
-            _advertisementBannerService.Update(item);
+            _productService.Update(updateToProductDTO);
             return Ok(CommonOperationMessages.DataUpdatedSuccessfully);
         }
         static string CloudinaryDelete(string image)
@@ -155,9 +167,9 @@ namespace DaxoneApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var advertisementBanner = _advertisementBannerService.GetById(id).Data;
-            advertisementBanner.Deleted = advertisementBanner.ID;
-            _advertisementBannerService.Delete(advertisementBanner);
+            var product = _productService.GetById(id).Data;
+            product.Deleted = product.ID;
+            _productService.Delete(product);
             return Ok(CommonOperationMessages.DataDeletedSuccessfully);
         }
 
@@ -178,8 +190,5 @@ namespace DaxoneApi.Controllers
                 return uploadResult.SecureUri.ToString();
             }
         }
-
     }
 }
-
-

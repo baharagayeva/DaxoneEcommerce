@@ -40,6 +40,12 @@ namespace DaxoneApi
             builder.Services.AddScoped<IAdvertisementBannerDAL, AdvertisementBannerEFDal>();
             builder.Services.AddScoped<IAdvertisementBannerService, AdvertisementBannerManager>();
             builder.Services.AddScoped<IValidator<AdvertisementBanner>, AdvertisementBannerValidator>();
+            builder.Services.AddScoped<IColorDAL, ColorEFDal>();
+            builder.Services.AddScoped<IColorService,  ColorManager>();
+            builder.Services.AddScoped<IValidator<Color>, ColorValidator>();
+            builder.Services.AddScoped<IProductDAL, ProductEFDal>();
+            builder.Services.AddScoped<IProductService, ProductManager>();
+            builder.Services.AddScoped<IValidator<Product>, ProductValidator>();
 
 
             var app = builder.Build();

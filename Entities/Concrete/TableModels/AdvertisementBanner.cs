@@ -17,6 +17,5 @@ namespace Entities.Concrete.TableModels
         public string ImgPath { get; set; }
         public int Discount { get; set; }
 
-
     }
 }

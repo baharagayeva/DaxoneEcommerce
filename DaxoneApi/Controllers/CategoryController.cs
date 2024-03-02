@@ -66,21 +66,21 @@ namespace DaxoneApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public Result Put(UpdateToCategoryDTO updateToCategoryDTO, int id)
+        public IActionResult Put(UpdateToCategoryDTO updateToCategoryDTO, int id)
         {
 
             updateToCategoryDTO.Id = id;
             _categoryService.Update(updateToCategoryDTO);
-            return new SuccessResult(CommonOperationMessages.DataUpdatedSuccessfully);
+            return Ok(CommonOperationMessages.DataUpdatedSuccessfully);
         }
 
         [HttpDelete("{id}")]
-        public Result Delete(int id)
+        public IActionResult Delete(int id)
         {
             var category = _categoryService.GetById(id).Data;
             category.Deleted = category.ID;
             _categoryService.Delete(category);
-            return new SuccessResult(CommonOperationMessages.DataDeletedSuccessfully);
+            return Ok(CommonOperationMessages.DataDeletedSuccessfully);
         }
     }
 }
