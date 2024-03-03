@@ -22,7 +22,6 @@ namespace Business.Concrete
             _advertisementBannerDAL = advertisementBannerDAL;
             _validationRules = validationRules;
         }
-
         public IDataResult<List<string>> Add(AdvertisementBanner advertisementBanner)
         {
             var result = _validationRules.Validate(advertisementBanner);
