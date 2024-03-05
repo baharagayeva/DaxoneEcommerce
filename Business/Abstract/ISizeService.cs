@@ -1,4 +1,5 @@
 ﻿using Core.Helpers.Results.Abstract;
+using Entities.Concrete.DTOs.SizeDTOs;
 using Entities.Concrete.TableModels;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,10 @@ namespace Business.Abstract
 {
     public interface ISizeService
     {
-        IDataResult<List<string>> Add(Size size);
+        IDataResult<List<string>> Add(AddToSizeDTO addToSizeDTO);
         IResult Delete(Size size);
-        IDataResult<List<string>> Update(Size size);
+        IDataResult<List<string>> Update(UpdateToSizeDTO updateToSizeDTO);
         IDataResult<Size> GetById(int id);
-        IDataResult<List<Size>> GetAll();
+        IDataResult<List<ListToSizeDTO>> GetAll();
     }
 }

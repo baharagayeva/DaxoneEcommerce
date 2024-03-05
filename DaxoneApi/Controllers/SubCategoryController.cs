@@ -1,29 +1,29 @@
 ﻿using Business.Abstract;
 using Business.Validations;
 using Core.Helpers.Constants;
-using Core.Helpers.Results.Concrete;
-using Entities.Concrete.DTOs.CategoryDTOs;
 using Entities.Concrete.DTOs.ColorDTOs;
+using Entities.Concrete.DTOs.SubCategoryDTOs;
 using Entities.Concrete.TableModels;
-using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DaxoneApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ColorController : ControllerBase
+    public class SubCategoryController : ControllerBase
     {
-        private readonly IColorService _colorService;
+        private readonly ISubCategoryService _subCategoryService;
 
-        public ColorController(IColorService colorService)
+        public SubCategoryController(ISubCategoryService subCategoryService)
         {
-            _colorService = colorService;
+            _subCategoryService = subCategoryService;
         }
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = _colorService.GetAll();
+            var result = _subCategoryService.GetAll();
             if (result.Success)
             {
                 return Ok(result.Data);
@@ -35,22 +35,22 @@ namespace DaxoneApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Color> GetAdmin(int id)
+        public async Task<SubCategory> GetAdmin(int id)
         {
-            var data = _colorService.GetById(id);
+            var data = _subCategoryService.GetById(id);
             return data.Data;
         }
 
         [HttpPost]
-        public IActionResult Add(AddToColorDTO addToColorDTO)
+        public IActionResult Add(AddToSubCategoryDTO addToSubCategoryDTO)
         {
-            Color color = new Color()
+            SubCategory subCategory = new SubCategory()
             {
-                Name = addToColorDTO.Name,
-                ColorCode = addToColorDTO.ColorCode,
+                Name = addToSubCategoryDTO.Name,
+                CategoryID = addToSubCategoryDTO.CategoryID,
             };
-            var validator = new ColorValidator();
-            var validationResult = validator.Validate(color);
+            var validator = new SubCategoryValidator();
+            var validationResult = validator.Validate(subCategory);
 
             if (!validationResult.IsValid)
             {
@@ -58,26 +58,26 @@ namespace DaxoneApi.Controllers
                 return BadRequest(errors);
             }
 
-            _colorService.Add(addToColorDTO);
+            _subCategoryService.Add(addToSubCategoryDTO);
 
             return Ok(CommonOperationMessages.DataAddedSuccessfully);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(UpdateToColorDTO updateToColorDTO, int id)
+        public IActionResult Put(UpdateToSubCategoryDTO updateToSubCategoryDTO, int id)
         {
 
-            updateToColorDTO.Id = id;
-            _colorService.Update(updateToColorDTO);
+            updateToSubCategoryDTO.Id = id;
+            _subCategoryService.Update(updateToSubCategoryDTO);
             return Ok(CommonOperationMessages.DataUpdatedSuccessfully);
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var color = _colorService.GetById(id).Data;
-            color.Deleted = color.ID;
-            _colorService.Delete(color);
+            var subCategory = _subCategoryService.GetById(id).Data;
+            subCategory.Deleted = subCategory.ID;
+            _subCategoryService.Delete(subCategory);
             return Ok(CommonOperationMessages.DataDeletedSuccessfully);
         }
     }

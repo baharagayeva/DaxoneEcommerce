@@ -46,6 +46,18 @@ namespace DaxoneApi
             builder.Services.AddScoped<IProductDAL, ProductEFDal>();
             builder.Services.AddScoped<IProductService, ProductManager>();
             builder.Services.AddScoped<IValidator<Product>, ProductValidator>();
+            builder.Services.AddScoped<IProductStatusDAL, ProductStatusEFDal>();
+            builder.Services.AddScoped<IProductStatusService, ProductStatusManager>();
+            builder.Services.AddScoped<IValidator<ProductStatus>, ProductStatusValidator>();
+            builder.Services.AddScoped<ISeasonDiscountDAL, SeasonDiscountEFDal>();
+            builder.Services.AddScoped<ISeasonDiscountService, SeasonDiscountManager>();
+            builder.Services.AddScoped<IValidator<SeasonDiscount>, SeasonDiscountValidator>();
+            builder.Services.AddScoped<ISizeDAL, SizeEFDal>();
+            builder.Services.AddScoped<ISizeService, SizeManager>();
+            builder.Services.AddScoped<IValidator<Size>, SizeValidator>();  
+            builder.Services.AddScoped<ISubCategoryDAL, SubCategoryEFDal>();
+            builder.Services.AddScoped<ISubCategoryService, SubCategoryManager>();
+            builder.Services.AddScoped<IValidator<SubCategory>, SubCategoryValidator>();
 
 
             var app = builder.Build();

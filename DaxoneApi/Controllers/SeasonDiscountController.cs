@@ -5,26 +5,24 @@ using CloudinaryDotNet;
 using Core.Helpers.Constants;
 using Entities.Concrete.TableModels;
 using Microsoft.AspNetCore.Mvc;
-using Entities.Concrete.DTOs.ColorDTOs;
-using Entities.Concrete.DTOs.ProductDTOs;
-using FluentValidation;
 
 namespace DaxoneApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class SeasonDiscountController : ControllerBase
     {
-        private readonly IProductService _productService;
+        private readonly ISeasonDiscountService _seasonDiscountService;
 
-        public ProductController(IProductService productService)
+        public SeasonDiscountController(ISeasonDiscountService seasonDiscountService)
         {
-            _productService = productService;
+            _seasonDiscountService = seasonDiscountService;
         }
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = _productService.GetAll();
+            var result = _seasonDiscountService.GetAll();
             if (result.Success)
             {
                 return Ok(result.Data);
@@ -36,30 +34,17 @@ namespace DaxoneApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Product> GetAdmin(int id)
+        public async Task<SeasonDiscount> GetAdmin(int id)
         {
-            var data = _productService.GetById(id);
+            var data = _seasonDiscountService.GetById(id);
             return data.Data;
         }
 
         [HttpPost]
-        public IActionResult Add([FromForm] AddToProductDTO addToProductDTO, IFormFile img)
+        public IActionResult Add([FromForm] SeasonDiscount seasonDiscount, IFormFile img)
         {
-            Product product = new Product()
-            {
-                Name = addToProductDTO.Name,
-                Description = addToProductDTO.Description,
-                CategoryID = addToProductDTO.CategoryID,
-                IsSale = addToProductDTO.IsSale,
-                Price = addToProductDTO.Price,
-                SalePrice = addToProductDTO.SalePrice,
-                ImgPath = addToProductDTO.ImgPath,
-                Model = addToProductDTO.Model,
-                StockCount = addToProductDTO.StockCount,
-            };
-
-            var validator = new ProductValidator();
-            var validationResult = validator.Validate(product);
+            var validator = new SeasonDiscountValidator();
+            var validationResult = validator.Validate(seasonDiscount);
 
             if (!validationResult.IsValid)
             {
@@ -68,8 +53,8 @@ namespace DaxoneApi.Controllers
             }
 
             var data = CloudinaryPost(img);
-            addToProductDTO.ImgPath = data;
-            _productService.Add(addToProductDTO);
+            seasonDiscount.ImgPath = data;
+            _seasonDiscountService.Add(seasonDiscount);
 
             return Ok(CommonOperationMessages.DataAddedSuccessfully);
         }
@@ -99,30 +84,24 @@ namespace DaxoneApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put([FromForm] UpdateToProductDTO updateToProductDTO, IFormFile image, int id)
+        public IActionResult Put([FromForm] SeasonDiscount seasonDiscount, IFormFile image, int id)
         {
 
-            var item = _productService.GetById(id).Data;
+            var item = _seasonDiscountService.GetById(id).Data;
             if (image != null)
             {
                 var oldlink = item.ImgPath;
                 CloudinaryDelete(oldlink);
                 var data = CloudinaryPost(image);
-                updateToProductDTO.ImgPath = data;
+                seasonDiscount.ImgPath = data;
             }
 
-            item.ID = id;
-            item.Name = updateToProductDTO.Name;
-            item.Description = updateToProductDTO.Description;
-            item.CategoryID = updateToProductDTO.CategoryID;
-            item.IsSale = updateToProductDTO.IsSale;
-            item.Price = updateToProductDTO.Price;
-            item.SalePrice = updateToProductDTO.SalePrice;
-            item.ImgPath = updateToProductDTO.ImgPath;
-            item.Model = updateToProductDTO.Model;
-            item.StockCount = updateToProductDTO.StockCount;
+            item.ImgPath = seasonDiscount.ImgPath;
+            item.TitleDescription = seasonDiscount.TitleDescription;
+            item.Description = seasonDiscount.Description;
+            item.Title = seasonDiscount.Title;
 
-            _productService.Update(updateToProductDTO);
+            _seasonDiscountService.Update(item);
             return Ok(CommonOperationMessages.DataUpdatedSuccessfully);
         }
         static string CloudinaryDelete(string image)
@@ -167,9 +146,9 @@ namespace DaxoneApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var product = _productService.GetById(id).Data;
-            product.Deleted = product.ID;
-            _productService.Delete(product);
+            var seasonDiscount = _seasonDiscountService.GetById(id).Data;
+            seasonDiscount.Deleted = seasonDiscount.ID;
+            _seasonDiscountService.Delete(seasonDiscount);
             return Ok(CommonOperationMessages.DataDeletedSuccessfully);
         }
 
