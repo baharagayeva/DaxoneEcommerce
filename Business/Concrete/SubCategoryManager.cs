@@ -1,8 +1,11 @@
-﻿using Business.Abstract;
+﻿using AutoMapper;
+using Business.Abstract;
 using Core.Helpers.Constants;
 using Core.Helpers.Results.Abstract;
 using Core.Helpers.Results.Concrete;
 using DataAccess.Abstract;
+using Entities.Concrete.DTOs.SizeDTOs;
+using Entities.Concrete.DTOs.SubCategoryDTOs;
 using Entities.Concrete.TableModels;
 using FluentValidation;
 using System;
@@ -18,14 +21,17 @@ namespace Business.Concrete
     {
         private readonly ISubCategoryDAL _subCategoryDAL;
         private readonly IValidator<SubCategory> _validationRules;
+        private readonly IMapper _mapper;
 
-        public SubCategoryManager(ISubCategoryDAL subCategoryDAL, IValidator<SubCategory> validationRules)
+        public SubCategoryManager(ISubCategoryDAL subCategoryDAL, IValidator<SubCategory> validationRules, IMapper mapper)
         {
             _subCategoryDAL = subCategoryDAL;
             _validationRules = validationRules;
+            _mapper = mapper;
         }
-        public IDataResult<List<string>> Add(SubCategory subCategory)
+        public IDataResult<List<string>> Add(AddToSubCategoryDTO addToSubCategoryDTO)
         {
+            SubCategory subCategory = _mapper.Map<SubCategory>(addToSubCategoryDTO);
             var result = _validationRules.Validate(subCategory);
             if (!result.IsValid)
             {
@@ -41,11 +47,11 @@ namespace Business.Concrete
             return new SuccessResult(CommonOperationMessages.DataDeletedSuccessfully);
         }
 
-        public IDataResult<List<SubCategory>> GetAll()
+        public IDataResult<List<ListToSubCategoryDTO>> GetAll()
         {
-            var data = _subCategoryDAL.GetAll(x => x.Deleted == 0);
-            data.Reverse();
-            return new SuccessDataResult<List<SubCategory>>(data);
+            List<SubCategory> subCategoryList = _subCategoryDAL.GetAll(x => x.Deleted == 0);
+            subCategoryList.Sort((x, y) => y.ID.CompareTo(x.ID));
+            return new SuccessDataResult<List<ListToSubCategoryDTO>>(_mapper.Map<List<ListToSubCategoryDTO>>(subCategoryList));
         }
 
         public IDataResult<SubCategory> GetById(int id)
@@ -53,8 +59,9 @@ namespace Business.Concrete
             return new SuccessDataResult<SubCategory>(_subCategoryDAL.Get(x => x.ID == id && x.Deleted == 0));
         }
 
-        public IDataResult<List<string>> Update(SubCategory subCategory)
+        public IDataResult<List<string>> Update(UpdateToSubCategoryDTO updateToSubCategoryDTO)
         {
+            SubCategory subCategory = _mapper.Map<SubCategory>(updateToSubCategoryDTO);
             var result = _validationRules.Validate(subCategory);
             if (!result.IsValid)
             {

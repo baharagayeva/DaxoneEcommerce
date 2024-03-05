@@ -1,29 +1,28 @@
 ﻿using Business.Abstract;
 using Business.Validations;
 using Core.Helpers.Constants;
-using Core.Helpers.Results.Concrete;
 using Entities.Concrete.DTOs.CategoryDTOs;
-using Entities.Concrete.DTOs.ColorDTOs;
+using Entities.Concrete.DTOs.SizeDTOs;
 using Entities.Concrete.TableModels;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DaxoneApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ColorController : ControllerBase
+    public class SizeController : ControllerBase
     {
-        private readonly IColorService _colorService;
+        private readonly ISizeService _sizeService;
 
-        public ColorController(IColorService colorService)
+        public SizeController(ISizeService sizeService)
         {
-            _colorService = colorService;
+            _sizeService = sizeService;
         }
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = _colorService.GetAll();
+            var result = _sizeService.GetAll();
             if (result.Success)
             {
                 return Ok(result.Data);
@@ -35,22 +34,21 @@ namespace DaxoneApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Color> GetAdmin(int id)
+        public async Task<Size> GetAdmin(int id)
         {
-            var data = _colorService.GetById(id);
+            var data = _sizeService.GetById(id);
             return data.Data;
         }
 
         [HttpPost]
-        public IActionResult Add(AddToColorDTO addToColorDTO)
+        public IActionResult Add(AddToSizeDTO addToSizeDTO)
         {
-            Color color = new Color()
+            Size size = new Size()
             {
-                Name = addToColorDTO.Name,
-                ColorCode = addToColorDTO.ColorCode,
+                Name = addToSizeDTO.Name,
             };
-            var validator = new ColorValidator();
-            var validationResult = validator.Validate(color);
+            var validator = new SizeValidator();
+            var validationResult = validator.Validate(size);
 
             if (!validationResult.IsValid)
             {
@@ -58,26 +56,26 @@ namespace DaxoneApi.Controllers
                 return BadRequest(errors);
             }
 
-            _colorService.Add(addToColorDTO);
+            _sizeService.Add(addToSizeDTO);
 
             return Ok(CommonOperationMessages.DataAddedSuccessfully);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(UpdateToColorDTO updateToColorDTO, int id)
+        public IActionResult Put(UpdateToSizeDTO updateToSizeDTO, int id)
         {
 
-            updateToColorDTO.Id = id;
-            _colorService.Update(updateToColorDTO);
+            updateToSizeDTO.Id = id;
+            _sizeService.Update(updateToSizeDTO);
             return Ok(CommonOperationMessages.DataUpdatedSuccessfully);
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var color = _colorService.GetById(id).Data;
-            color.Deleted = color.ID;
-            _colorService.Delete(color);
+            var size = _sizeService.GetById(id).Data;
+            size.Deleted = size.ID;
+            _sizeService.Delete(size);
             return Ok(CommonOperationMessages.DataDeletedSuccessfully);
         }
     }
