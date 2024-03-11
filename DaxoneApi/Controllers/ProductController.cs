@@ -45,33 +45,11 @@ namespace DaxoneApi.Controllers
         [HttpPost]
         public IActionResult Add([FromForm] AddToProductDTO addToProductDTO, IFormFile img)
         {
-            Product product = new Product()
-            {
-                Name = addToProductDTO.Name,
-                Description = addToProductDTO.Description,
-                CategoryID = addToProductDTO.CategoryID,
-                IsSale = addToProductDTO.IsSale,
-                Price = addToProductDTO.Price,
-                SalePrice = addToProductDTO.SalePrice,
-                ImgPath = addToProductDTO.ImgPath,
-                Model = addToProductDTO.Model,
-                StockCount = addToProductDTO.StockCount,
-            };
-
-            var validator = new ProductValidator();
-            var validationResult = validator.Validate(product);
-
-            if (!validationResult.IsValid)
-            {
-                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return BadRequest(errors);
-            }
-
             var data = CloudinaryPost(img);
             addToProductDTO.ImgPath = data;
-            _productService.Add(addToProductDTO);
+            var result = _productService.Add(addToProductDTO);
 
-            return Ok(CommonOperationMessages.DataAddedSuccessfully);
+            return Ok(result);
         }
 
         static string CloudinaryPost(IFormFile img)
@@ -122,8 +100,8 @@ namespace DaxoneApi.Controllers
             item.Model = updateToProductDTO.Model;
             item.StockCount = updateToProductDTO.StockCount;
 
-            _productService.Update(updateToProductDTO);
-            return Ok(CommonOperationMessages.DataUpdatedSuccessfully);
+            var result = _productService.Update(updateToProductDTO);
+            return Ok(result);
         }
         static string CloudinaryDelete(string image)
         {

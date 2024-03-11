@@ -13,7 +13,7 @@ namespace DataAccess.Configurations
     {
         public void Configure(EntityTypeBuilder<SubCategory> builder)
         {
-            builder.Property(x => x.Name).HasMaxLength(10);
+            builder.Property(x => x.Name).HasMaxLength(15);
             builder.Property(x => x.Deleted).HasDefaultValue<int>(0);
 
             builder.HasIndex(x => new { x.Name, x.Deleted })

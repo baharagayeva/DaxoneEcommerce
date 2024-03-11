@@ -44,23 +44,9 @@ namespace DaxoneApi.Controllers
         [HttpPost]
         public IActionResult Add(AddToColorDTO addToColorDTO)
         {
-            Color color = new Color()
-            {
-                Name = addToColorDTO.Name,
-                ColorCode = addToColorDTO.ColorCode,
-            };
-            var validator = new ColorValidator();
-            var validationResult = validator.Validate(color);
+            var result = _colorService.Add(addToColorDTO);
 
-            if (!validationResult.IsValid)
-            {
-                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return BadRequest(errors);
-            }
-
-            _colorService.Add(addToColorDTO);
-
-            return Ok(CommonOperationMessages.DataAddedSuccessfully);
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
@@ -68,8 +54,8 @@ namespace DaxoneApi.Controllers
         {
 
             updateToColorDTO.Id = id;
-            _colorService.Update(updateToColorDTO);
-            return Ok(CommonOperationMessages.DataUpdatedSuccessfully);
+            var result = _colorService.Update(updateToColorDTO);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
@@ -81,4 +67,5 @@ namespace DaxoneApi.Controllers
             return Ok(CommonOperationMessages.DataDeletedSuccessfully);
         }
     }
+
 }

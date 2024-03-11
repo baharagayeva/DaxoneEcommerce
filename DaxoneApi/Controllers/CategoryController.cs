@@ -47,22 +47,9 @@ namespace DaxoneApi.Controllers
         [HttpPost]
         public IActionResult Add(AddToCategoryDTO addToCategoryDTO)
         {
-            Category category = new Category()
-            {
-                Name = addToCategoryDTO.Name,
-            };
-            var validator = new CategoryValidator();
-            var validationResult = validator.Validate(category);
+            var result = _categoryService.Add(addToCategoryDTO);
 
-            if (!validationResult.IsValid)
-            {
-                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return BadRequest(errors);
-            }
-
-            _categoryService.Add(addToCategoryDTO);
-
-            return Ok(CommonOperationMessages.DataAddedSuccessfully);
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
@@ -70,8 +57,8 @@ namespace DaxoneApi.Controllers
         {
 
             updateToCategoryDTO.Id = id;
-            _categoryService.Update(updateToCategoryDTO);
-            return Ok(CommonOperationMessages.DataUpdatedSuccessfully);
+            var result = _categoryService.Update(updateToCategoryDTO);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]

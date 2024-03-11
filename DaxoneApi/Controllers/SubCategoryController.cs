@@ -44,23 +44,9 @@ namespace DaxoneApi.Controllers
         [HttpPost]
         public IActionResult Add(AddToSubCategoryDTO addToSubCategoryDTO)
         {
-            SubCategory subCategory = new SubCategory()
-            {
-                Name = addToSubCategoryDTO.Name,
-                CategoryID = addToSubCategoryDTO.CategoryID,
-            };
-            var validator = new SubCategoryValidator();
-            var validationResult = validator.Validate(subCategory);
+            var result = _subCategoryService.Add(addToSubCategoryDTO);
 
-            if (!validationResult.IsValid)
-            {
-                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return BadRequest(errors);
-            }
-
-            _subCategoryService.Add(addToSubCategoryDTO);
-
-            return Ok(CommonOperationMessages.DataAddedSuccessfully);
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
@@ -68,8 +54,8 @@ namespace DaxoneApi.Controllers
         {
 
             updateToSubCategoryDTO.Id = id;
-            _subCategoryService.Update(updateToSubCategoryDTO);
-            return Ok(CommonOperationMessages.DataUpdatedSuccessfully);
+            var result = _subCategoryService.Update(updateToSubCategoryDTO);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]

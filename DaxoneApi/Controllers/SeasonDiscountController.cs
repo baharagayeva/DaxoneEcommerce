@@ -43,20 +43,11 @@ namespace DaxoneApi.Controllers
         [HttpPost]
         public IActionResult Add([FromForm] SeasonDiscount seasonDiscount, IFormFile img)
         {
-            var validator = new SeasonDiscountValidator();
-            var validationResult = validator.Validate(seasonDiscount);
-
-            if (!validationResult.IsValid)
-            {
-                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return BadRequest(errors);
-            }
-
             var data = CloudinaryPost(img);
             seasonDiscount.ImgPath = data;
-            _seasonDiscountService.Add(seasonDiscount);
+            var result = _seasonDiscountService.Add(seasonDiscount);
 
-            return Ok(CommonOperationMessages.DataAddedSuccessfully);
+            return Ok(result);
         }
 
         static string CloudinaryPost(IFormFile img)
@@ -101,8 +92,8 @@ namespace DaxoneApi.Controllers
             item.Description = seasonDiscount.Description;
             item.Title = seasonDiscount.Title;
 
-            _seasonDiscountService.Update(item);
-            return Ok(CommonOperationMessages.DataUpdatedSuccessfully);
+            var result = _seasonDiscountService.Update(item);
+            return Ok(result);
         }
         static string CloudinaryDelete(string image)
         {
