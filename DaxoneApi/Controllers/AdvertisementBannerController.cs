@@ -52,20 +52,12 @@ namespace DaxoneApi.Controllers
         [HttpPost]
         public IActionResult Add([FromForm] AdvertisementBanner advertisementBanner, IFormFile img)
         {
-            var validator = new AdvertisementBannerValidator();
-            var validationResult = validator.Validate(advertisementBanner);
-
-            if (!validationResult.IsValid)
-            {
-                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return BadRequest(errors);
-            }
 
             var data = CloudinaryPost(img);
             advertisementBanner.ImgPath = data;
-            _advertisementBannerService.Add(advertisementBanner);
+            var result = _advertisementBannerService.Add(advertisementBanner);
 
-            return Ok(CommonOperationMessages.DataAddedSuccessfully);
+            return Ok(result);
         }
 
         static string CloudinaryPost(IFormFile img)
@@ -110,8 +102,8 @@ namespace DaxoneApi.Controllers
             item.Description = advertisementBanner.Description;
             item.Title = advertisementBanner.Title;
 
-            _advertisementBannerService.Update(item);
-            return Ok(CommonOperationMessages.DataUpdatedSuccessfully);
+            var result = _advertisementBannerService.Update(item);
+            return Ok(result);
         }
         static string CloudinaryDelete(string image)
         {

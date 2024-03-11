@@ -12,7 +12,8 @@ namespace Business.Validations
     {
         public ColorValidator()
         {
-            RuleFor(x => x.Name).NotEmpty().WithMessage(ValidationMessages.ValidationMessages.CanNotBeEmpty);
+            RuleFor(x => x.Name).NotEmpty().WithMessage(ValidationMessages.ValidationMessages.CanNotBeEmpty)
+                                .MaximumLength(15).WithMessage(ValidationMessages.ValidationMessages.NameHasMaxLength);
             RuleFor(x => x.ColorCode).NotEmpty().WithMessage(ValidationMessages.ValidationMessages.CanNotBeEmpty);
         }
     }

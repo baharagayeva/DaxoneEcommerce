@@ -43,24 +43,9 @@ namespace DaxoneApi.Controllers
         [HttpPost]
         public IActionResult Add(AddToProductStatusDTO addToProductStatusDTO)
         {
-            ProductStatus productStatus = new ProductStatus()
-            {
-                New = addToProductStatusDTO.New,
-                InStock = addToProductStatusDTO.InStock,
-                StockOut = addToProductStatusDTO.StockOut,
-            };
-            var validator = new ProductStatusValidator();
-            var validationResult = validator.Validate(productStatus);
+            var result = _productStatusService.Add(addToProductStatusDTO);
 
-            if (!validationResult.IsValid)
-            {
-                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return BadRequest(errors);
-            }
-
-            _productStatusService.Add(addToProductStatusDTO);
-
-            return Ok(CommonOperationMessages.DataAddedSuccessfully);
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
@@ -68,8 +53,8 @@ namespace DaxoneApi.Controllers
         {
 
             updateToProductStatusDTO.Id = id;
-            _productStatusService.Update(updateToProductStatusDTO);
-            return Ok(CommonOperationMessages.DataUpdatedSuccessfully);
+            var result = _productStatusService.Update(updateToProductStatusDTO);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]

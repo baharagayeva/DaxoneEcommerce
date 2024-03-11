@@ -43,22 +43,9 @@ namespace DaxoneApi.Controllers
         [HttpPost]
         public IActionResult Add(AddToSizeDTO addToSizeDTO)
         {
-            Size size = new Size()
-            {
-                Name = addToSizeDTO.Name,
-            };
-            var validator = new SizeValidator();
-            var validationResult = validator.Validate(size);
+            var result = _sizeService.Add(addToSizeDTO);
 
-            if (!validationResult.IsValid)
-            {
-                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return BadRequest(errors);
-            }
-
-            _sizeService.Add(addToSizeDTO);
-
-            return Ok(CommonOperationMessages.DataAddedSuccessfully);
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
@@ -66,8 +53,8 @@ namespace DaxoneApi.Controllers
         {
 
             updateToSizeDTO.Id = id;
-            _sizeService.Update(updateToSizeDTO);
-            return Ok(CommonOperationMessages.DataUpdatedSuccessfully);
+            var result = _sizeService.Update(updateToSizeDTO);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]

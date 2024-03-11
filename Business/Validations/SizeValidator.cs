@@ -12,7 +12,8 @@ namespace Business.Validations
     {
         public SizeValidator()
         {
-            RuleFor(x => x.Name).NotEmpty().WithMessage(ValidationMessages.ValidationMessages.CanNotBeEmpty);
+            RuleFor(x => x.Name).NotEmpty().WithMessage(ValidationMessages.ValidationMessages.CanNotBeEmpty)
+                                .Length(1,10).WithMessage(ValidationMessages.ValidationMessages.SizeLength);
         }
     }
 }

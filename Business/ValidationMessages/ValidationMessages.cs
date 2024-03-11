@@ -13,5 +13,7 @@ namespace Business.ValidationMessages
         public static readonly string HasLength = "Field must have minimum 40 and maximum 200 symbols";
         public static readonly string FileCanNotBeEmpty = "File can not be empty";
         public static readonly string CanNotBeNegative = "Value can not be negative";
+        public static readonly string SizeLength = "Size must have minimum 1 and maximum 10 symbols";
+        public static readonly string NameHasMaxLength = "Field must not exceed 15 characters";
     }
 }
