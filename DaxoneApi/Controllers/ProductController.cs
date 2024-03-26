@@ -22,7 +22,7 @@ namespace DaxoneApi.Controllers
             _productService = productService;
         }
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
             var result = _productService.GetAll();
             if (result.Success)

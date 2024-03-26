@@ -10,8 +10,11 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class DaxoneDbContext : IdentityDbContext<User, Role, int>
+    public class DaxoneDbContext : DbContext
     {
+        //public DaxoneDbContext(DbContextOptions<DaxoneDbContext> dbContextOptions) : base(dbContextOptions)
+        //{ 
+        //}
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=DaxoneDb;Integrated Security=True");

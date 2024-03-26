@@ -21,7 +21,7 @@ namespace DaxoneApi.Controllers
             _colorService = colorService;
         }
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
             var result = _colorService.GetAll();
             if (result.Success)

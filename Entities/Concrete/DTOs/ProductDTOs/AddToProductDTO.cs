@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Entities.Concrete.DTOs.ColorDTOs;
+using Entities.Concrete.DTOs.ProductStatusDTOs;
+using Entities.Concrete.DTOs.SizeDTOs;
+using Entities.Concrete.TableModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,5 +21,9 @@ namespace Entities.Concrete.DTOs.ProductDTOs
         public string ImgPath { get; set; }
         public string Model { get; set; }
         public int StockCount { get; set; }
+
+        public List<AddToColorDTO> Colors { get; set; }
+        public List<AddToSizeDTO> Sizes { get; set; }
+        public List<AddToProductStatusDTO> ProductStatuses { get; set; }
     }
 }

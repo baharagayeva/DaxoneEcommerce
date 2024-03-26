@@ -20,7 +20,7 @@ namespace DaxoneApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
             var result = _productStatusService.GetAll();
             if (result.Success)

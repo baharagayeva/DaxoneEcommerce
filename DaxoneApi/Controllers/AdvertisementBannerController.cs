@@ -18,6 +18,7 @@ namespace DaxoneApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class AdvertisementBannerController : ControllerBase
     {
         private readonly IAdvertisementBannerService _advertisementBannerService;
@@ -29,7 +30,7 @@ namespace DaxoneApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
             var result = _advertisementBannerService.GetAll();
             if (result.Success)
