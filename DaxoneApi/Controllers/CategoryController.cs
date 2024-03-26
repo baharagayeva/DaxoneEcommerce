@@ -14,6 +14,7 @@ namespace DaxoneApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -24,7 +25,8 @@ namespace DaxoneApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        //[Authorize(Roles = "Reader")]
+        public async Task<IActionResult> GetAll()
         {
             var result = _categoryService.GetAll();
             if (result.Success)
@@ -38,6 +40,7 @@ namespace DaxoneApi.Controllers
         }
 
         [HttpGet("{id}")]
+        //[Authorize(Roles = "Reader")]
         public async Task<Category> GetAdmin(int id)
         {
             var data = _categoryService.GetById(id);
@@ -45,14 +48,15 @@ namespace DaxoneApi.Controllers
         }
 
         [HttpPost]
+        //[Authorize(Roles = "Writer")]
         public IActionResult Add(AddToCategoryDTO addToCategoryDTO)
         {
             var result = _categoryService.Add(addToCategoryDTO);
-
             return Ok(result);
         }
 
         [HttpPut("{id}")]
+        //[Authorize(Roles = "Writer")]
         public IActionResult Put(UpdateToCategoryDTO updateToCategoryDTO, int id)
         {
 
@@ -62,6 +66,7 @@ namespace DaxoneApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        //[Authorize(Roles = "Writer")]
         public IActionResult Delete(int id)
         {
             var category = _categoryService.GetById(id).Data;

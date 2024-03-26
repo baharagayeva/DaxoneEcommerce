@@ -13,7 +13,7 @@ namespace DataAccess.Concrete.EntityFramework
     {
         private readonly DaxoneDbContext _context;
 
-        public AdvertisementBannerEFDal(DaxoneDbContext context)
+        public AdvertisementBannerEFDal(DaxoneDbContext context) 
         {
             _context = context;
         }

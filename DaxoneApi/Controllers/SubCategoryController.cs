@@ -14,14 +14,16 @@ namespace DaxoneApi.Controllers
     public class SubCategoryController : ControllerBase
     {
         private readonly ISubCategoryService _subCategoryService;
+        private readonly ICategoryService _categoryService;
 
-        public SubCategoryController(ISubCategoryService subCategoryService)
+        public SubCategoryController(ISubCategoryService subCategoryService, ICategoryService categoryService)
         {
             _subCategoryService = subCategoryService;
+            _categoryService = categoryService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
             var result = _subCategoryService.GetAll();
             if (result.Success)
