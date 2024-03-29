@@ -6,6 +6,7 @@ using Entities.Concrete.DTOs.ProductStatusDTOs;
 using Entities.Concrete.DTOs.SizeDTOs;
 using Entities.Concrete.DTOs.SubCategoryDTOs;
 using Entities.Concrete.TableModels;
+using Entities.Concrete.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,8 @@ namespace DataAccess.Mapper
             CreateMap<Product, ListToProductDTO>().ReverseMap();
             CreateMap<AddToProductDTO, Product>().ReverseMap();
             CreateMap<UpdateToProductDTO, Product>().ReverseMap();
+            CreateMap<ProductGetViewModel, Product>().ReverseMap();
+
 
             CreateMap<ProductStatus, ListToProductStatusDTO>().ReverseMap();
             CreateMap<AddToProductStatusDTO, ProductStatus>().ReverseMap();

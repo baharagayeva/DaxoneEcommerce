@@ -4,12 +4,14 @@ using Core.Helpers.Constants;
 using Entities.Concrete.DTOs.ColorDTOs;
 using Entities.Concrete.DTOs.ProductStatusDTOs;
 using Entities.Concrete.TableModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DaxoneApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class ProductStatusController : ControllerBase
     {
         private readonly IProductStatusService _productStatusService;

@@ -55,7 +55,7 @@ namespace Business.Concrete
 
         public IDataResult<ProductStatus> GetById(int id)
         {
-            return new SuccessDataResult<ProductStatus>(_productStatusDAL.GetProductStatus(x => x.ID == id && x.Deleted == 0));
+            return new SuccessDataResult<ProductStatus>(_productStatusDAL.Get(x => x.ID == id && x.Deleted == 0));
         }
 
         public IDataResult<List<string>> Update(UpdateToProductStatusDTO updateToProductStatusDTO)

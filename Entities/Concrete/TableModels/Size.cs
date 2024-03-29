@@ -11,6 +11,6 @@ namespace Entities.Concrete.TableModels
     {
         public string Name { get; set; }
 
-        public List<Product> Products { get; set; }
+        public ICollection<ProductSize> ProductSizes { get; set; } = new List<ProductSize>();
     }
 }

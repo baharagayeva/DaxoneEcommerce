@@ -12,9 +12,7 @@ namespace Business.Validations
     {
         public ProductStatusValidator() 
         {
-            RuleFor(x => x.New).NotEmpty().WithMessage(ValidationMessages.ValidationMessages.CanNotBeEmpty);
-            RuleFor(x => x.InStock).NotEmpty().WithMessage(ValidationMessages.ValidationMessages.CanNotBeEmpty);
-            RuleFor(x => x.StockOut).NotEmpty().WithMessage(ValidationMessages.ValidationMessages.CanNotBeEmpty);
+           
         }
     }
 }

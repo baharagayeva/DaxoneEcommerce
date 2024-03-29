@@ -36,5 +36,8 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<Size> Sizes { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<ProductSize> ProductSizes { get; set; }
+        public DbSet<ProductColor> ProductColors { get; set; }
+        public DbSet<ProductProductStatus> ProductProductStatuses { get; set; }
     }
 }

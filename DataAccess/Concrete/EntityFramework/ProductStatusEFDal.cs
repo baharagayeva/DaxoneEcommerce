@@ -19,13 +19,5 @@ namespace DataAccess.Concrete.EntityFramework
         {
             _context = context;
         }
-        ProductStatus IProductStatusDAL.GetProductStatus(Expression<Func<ProductStatus, bool>> predicate)
-        {
-            return predicate is null
-                 ?
-                  _context.Set<ProductStatus>().Include(x => x.Products).FirstOrDefault()
-                 :
-                 _context.Set<ProductStatus>().Include(x => x.Products).FirstOrDefault(predicate);
-        }
     }
 }
