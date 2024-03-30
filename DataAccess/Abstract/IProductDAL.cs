@@ -1,5 +1,6 @@
 ﻿using Core.DataAccess.Abstract;
 using Entities.Concrete.TableModels;
+using Entities.Concrete.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,10 @@ namespace DataAccess.Abstract
 {
     public interface IProductDAL : IRepository<Product>
     {
-        List<Product> GetAll(Expression<Func<Product, bool>> predicate = null);
+        public List<Product> GetAllWithProduct();
+        public Product GetProductById(int id);
+
+        public void AddWithProduct(ProductGetViewModel producSizeGetViewModel);
+        public void UpdateWithProduct(ProductUpdateViewModel producSizeGetViewModel);
     }
 }

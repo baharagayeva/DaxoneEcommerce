@@ -16,6 +16,8 @@ namespace Entities.Concrete.TableModels
         public string Description { get; set; }
         public string ImgPath { get; set; }
         public int Discount { get; set; }
+        [NotMapped]
+        public IFormFile Image { get; set; }
 
     }
 }

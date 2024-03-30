@@ -4,12 +4,14 @@ using Core.Helpers.Constants;
 using Entities.Concrete.DTOs.CategoryDTOs;
 using Entities.Concrete.DTOs.SizeDTOs;
 using Entities.Concrete.TableModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DaxoneApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class SizeController : ControllerBase
     {
         private readonly ISizeService _sizeService;

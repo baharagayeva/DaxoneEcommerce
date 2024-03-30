@@ -9,10 +9,10 @@ namespace Entities.Concrete.TableModels
 {
     public class ProductStatus : BaseEntity
     {
-        public string New { get; set; }
-        public string InStock { get; set; }
-        public string StockOut { get; set; }
+        public bool IsNew { get; set; }
+        public bool IsStock { get; set; }
+        public bool IsStockOut { get; set; }
 
-        public List<Product> Products { get; set; }
+        public ICollection<ProductProductStatus> ProductProductStatuses { get; set; } = new List<ProductProductStatus>();
     }
 }

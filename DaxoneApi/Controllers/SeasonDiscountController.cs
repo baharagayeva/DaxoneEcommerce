@@ -5,11 +5,14 @@ using CloudinaryDotNet;
 using Core.Helpers.Constants;
 using Entities.Concrete.TableModels;
 using Microsoft.AspNetCore.Mvc;
+using Business.Cloudinaries;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DaxoneApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class SeasonDiscountController : ControllerBase
     {
         private readonly ISeasonDiscountService _seasonDiscountService;
@@ -41,49 +44,26 @@ namespace DaxoneApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add([FromForm] SeasonDiscount seasonDiscount, IFormFile img)
+        public IActionResult Add([FromForm] SeasonDiscount seasonDiscount)
         {
-            var data = CloudinaryPost(img);
+            var data = CloudinarySettings.CloudinaryPost(seasonDiscount.Image);
             seasonDiscount.ImgPath = data;
             var result = _seasonDiscountService.Add(seasonDiscount);
 
             return Ok(result);
         }
 
-        static string CloudinaryPost(IFormFile img)
-        {
-            string cloudName = "dkmr0x3ul";
-            string apiKey = "482299463525874";
-            string apiSecret = "Wss6cQtBxQBamETqlhQZKnCa8-c";
-            string cloudinaryFolder = "Home/Daxone";
-
-            var cloudinaryAccount = new Account(cloudName, apiKey, apiSecret);
-            var cloudinary = new Cloudinary(cloudinaryAccount);
-
-            try
-            {
-                string uniqueFilename = Guid.NewGuid().ToString("N");
-                string cloudinaryImagePath = $"{cloudinaryFolder}/{uniqueFilename}";
-                string link = $"https://res.cloudinary.com/{cloudName}/{cloudinaryImagePath}";
-                var uploadResult = UploadImageAndGetPath(cloudinary, img, cloudinaryImagePath);
-                return link;
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-        }
 
         [HttpPut("{id}")]
-        public IActionResult Put([FromForm] SeasonDiscount seasonDiscount, IFormFile image, int id)
+        public IActionResult Put([FromForm] SeasonDiscount seasonDiscount, int id)
         {
 
             var item = _seasonDiscountService.GetById(id).Data;
-            if (image != null)
+            if (seasonDiscount.Image != null)
             {
                 var oldlink = item.ImgPath;
-                CloudinaryDelete(oldlink);
-                var data = CloudinaryPost(image);
+                CloudinarySettings.CloudinaryDelete(oldlink);
+                var data = CloudinarySettings.CloudinaryPost(seasonDiscount.Image);
                 seasonDiscount.ImgPath = data;
             }
 
@@ -95,44 +75,7 @@ namespace DaxoneApi.Controllers
             var result = _seasonDiscountService.Update(item);
             return Ok(result);
         }
-        static string CloudinaryDelete(string image)
-        {
-
-            try
-            {
-                string cloudName = "dkmr0x3ul";
-                string apiKey = "482299463525874";
-                string apiSecret = "Wss6cQtBxQBamETqlhQZKnCa8-c";
-
-                var cloudinaryAccount = new Account(cloudName, apiKey, apiSecret);
-                var cloudinary = new Cloudinary(cloudinaryAccount);
-
-                var publicIds = new List<string>();
-                publicIds.Add(image);
-
-                DelResParams deleteParams = new DelResParams()
-                {
-                    PublicIds = publicIds
-                };
-
-                DelResResult result = cloudinary.DeleteResources(deleteParams);
-
-                if (result.StatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    return "Images deleted successfully.";
-                }
-                else
-                {
-                    return "Failed to delete images. Error: " + result.Error.Message;
-                }
-            }
-
-
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-        }
+        
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
@@ -143,22 +86,5 @@ namespace DaxoneApi.Controllers
             return Ok(CommonOperationMessages.DataDeletedSuccessfully);
         }
 
-        static string UploadImageAndGetPath(Cloudinary cloudinary, IFormFile image, string cloudinaryImagePath)
-        {
-            using (var stream = image.OpenReadStream())
-            {
-                cloudinaryImagePath = cloudinaryImagePath.TrimStart('/');
-
-                var uploadParams = new ImageUploadParams
-                {
-                    File = new FileDescription(image.FileName, stream),
-                    PublicId = cloudinaryImagePath,
-                };
-
-                var uploadResult = cloudinary.Upload(uploadParams);
-
-                return uploadResult.SecureUri.ToString();
-            }
-        }
     }
 }

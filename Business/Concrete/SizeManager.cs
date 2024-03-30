@@ -55,7 +55,7 @@ namespace Business.Concrete
 
         public IDataResult<Size> GetById(int id)
         {
-            return new SuccessDataResult<Size>(_sizeDAL.GetSize(x => x.ID == id && x.Deleted == 0));
+            return new SuccessDataResult<Size>(_sizeDAL.Get(x => x.ID == id && x.Deleted == 0));
         }
 
         public IDataResult<List<string>> Update(UpdateToSizeDTO updateToSizeDTO)

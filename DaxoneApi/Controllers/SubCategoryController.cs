@@ -4,6 +4,7 @@ using Core.Helpers.Constants;
 using Entities.Concrete.DTOs.ColorDTOs;
 using Entities.Concrete.DTOs.SubCategoryDTOs;
 using Entities.Concrete.TableModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,7 @@ namespace DaxoneApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class SubCategoryController : ControllerBase
     {
         private readonly ISubCategoryService _subCategoryService;

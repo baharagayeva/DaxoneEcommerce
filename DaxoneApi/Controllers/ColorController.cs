@@ -6,12 +6,14 @@ using Entities.Concrete.DTOs.CategoryDTOs;
 using Entities.Concrete.DTOs.ColorDTOs;
 using Entities.Concrete.TableModels;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DaxoneApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class ColorController : ControllerBase
     {
         private readonly IColorService _colorService;

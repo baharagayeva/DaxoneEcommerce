@@ -55,7 +55,7 @@ namespace Business.Concrete
 
         public IDataResult<Color> GetById(int id)
         {
-            return new SuccessDataResult<Color>(_colorDAL.GetColor(x => x.ID == id && x.Deleted == 0));
+            return new SuccessDataResult<Color>(_colorDAL.Get(x => x.ID == id && x.Deleted == 0));
         }
 
         public IDataResult<List<string>> Update(UpdateToColorDTO updateToColorDTO)

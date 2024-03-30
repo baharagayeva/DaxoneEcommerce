@@ -20,10 +20,13 @@ namespace Entities.Concrete.TableModels
         public string Model { get; set; }
         public int StockCount { get; set; }
 
-        public List<Color> Colors { get; set; }
-        public List<Size> Sizes { get; set; }
         public Category Category { get; set; }
-        public List<ProductStatus> ProductStatuses { get; set; }
+        public ICollection<ProductColor> ProductColors { get; set; }= new List<ProductColor>();
+        public ICollection<ProductSize> ProductSizes { get; set; } = new List<ProductSize>();
+        public ICollection<ProductProductStatus> ProductProductStatuses { get; set; } = new List<ProductProductStatus>();
 
+        //public List<ProductStatus> ProductStatuses { get; set; }
+        //public List<Color> Colors { get; set; }
+        //public List<Size> Sizes { get; set; }
     }
 }

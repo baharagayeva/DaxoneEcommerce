@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using DataAccess.UnitOfWork;
 
 namespace DaxoneApi
 {
@@ -129,7 +130,7 @@ namespace DaxoneApi
             builder.Services.AddScoped<ISubCategoryService, SubCategoryManager>();
             builder.Services.AddScoped<IValidator<SubCategory>, SubCategoryValidator>();
             builder.Services.AddScoped<ITokenService, TokenManager>();
-
+            builder.Services.AddScoped<IUnitOfWorks, UnitOfWorks>();
 
             var app = builder.Build();
 
