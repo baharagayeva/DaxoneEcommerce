@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccess.Migrations
 {
-    public partial class Initial : Migration
+    public partial class miginit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -61,9 +61,9 @@ namespace DataAccess.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    New = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InStock = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StockOut = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsNew = table.Column<bool>(type: "bit", nullable: false),
+                    IsStock = table.Column<bool>(type: "bit", nullable: false),
+                    IsStockOut = table.Column<bool>(type: "bit", nullable: false),
                     Deleted = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
                 },
                 constraints: table =>
@@ -193,75 +193,75 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ColorProduct",
+                name: "ProductColors",
                 columns: table => new
                 {
-                    ColorsID = table.Column<int>(type: "int", nullable: false),
-                    ProductsID = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductID = table.Column<int>(type: "int", nullable: true),
+                    ColorID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ColorProduct", x => new { x.ColorsID, x.ProductsID });
+                    table.PrimaryKey("PK_ProductColors", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_ColorProduct_Colors_ColorsID",
-                        column: x => x.ColorsID,
+                        name: "FK_ProductColors_Colors_ColorID",
+                        column: x => x.ColorID,
                         principalTable: "Colors",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_ColorProduct_Products_ProductsID",
-                        column: x => x.ProductsID,
+                        name: "FK_ProductColors_Products_ProductID",
+                        column: x => x.ProductID,
                         principalTable: "Products",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductProductStatus",
+                name: "ProductProductStatuses",
                 columns: table => new
                 {
-                    ProductStatusesID = table.Column<int>(type: "int", nullable: false),
-                    ProductsID = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductID = table.Column<int>(type: "int", nullable: true),
+                    ProductStatusID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductProductStatus", x => new { x.ProductStatusesID, x.ProductsID });
+                    table.PrimaryKey("PK_ProductProductStatuses", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_ProductProductStatus_Products_ProductsID",
-                        column: x => x.ProductsID,
+                        name: "FK_ProductProductStatuses_Products_ProductID",
+                        column: x => x.ProductID,
                         principalTable: "Products",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_ProductProductStatus_ProductStatuses_ProductStatusesID",
-                        column: x => x.ProductStatusesID,
+                        name: "FK_ProductProductStatuses_ProductStatuses_ProductStatusID",
+                        column: x => x.ProductStatusID,
                         principalTable: "ProductStatuses",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductSize",
+                name: "ProductSizes",
                 columns: table => new
                 {
-                    ProductsID = table.Column<int>(type: "int", nullable: false),
-                    SizesID = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductID = table.Column<int>(type: "int", nullable: true),
+                    SizeID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductSize", x => new { x.ProductsID, x.SizesID });
+                    table.PrimaryKey("PK_ProductSizes", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_ProductSize_Products_ProductsID",
-                        column: x => x.ProductsID,
+                        name: "FK_ProductSizes_Products_ProductID",
+                        column: x => x.ProductID,
                         principalTable: "Products",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_ProductSize_Sizes_SizesID",
-                        column: x => x.SizesID,
+                        name: "FK_ProductSizes_Sizes_SizeID",
+                        column: x => x.SizeID,
                         principalTable: "Sizes",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateIndex(
@@ -275,19 +275,29 @@ namespace DataAccess.Migrations
                 columns: new[] { "Name", "Deleted" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ColorProduct_ProductsID",
-                table: "ColorProduct",
-                column: "ProductsID");
-
-            migrationBuilder.CreateIndex(
                 name: "idx_Color_Name_Deleted",
                 table: "Colors",
                 columns: new[] { "Name", "Deleted" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductProductStatus_ProductsID",
-                table: "ProductProductStatus",
-                column: "ProductsID");
+                name: "IX_ProductColors_ColorID",
+                table: "ProductColors",
+                column: "ColorID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductColors_ProductID",
+                table: "ProductColors",
+                column: "ProductID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductProductStatuses_ProductID",
+                table: "ProductProductStatuses",
+                column: "ProductID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductProductStatuses_ProductStatusID",
+                table: "ProductProductStatuses",
+                column: "ProductStatusID");
 
             migrationBuilder.CreateIndex(
                 name: "idx_Product_Name_Deleted",
@@ -300,9 +310,14 @@ namespace DataAccess.Migrations
                 column: "CategoryID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductSize_SizesID",
-                table: "ProductSize",
-                column: "SizesID");
+                name: "IX_ProductSizes_ProductID",
+                table: "ProductSizes",
+                column: "ProductID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductSizes_SizeID",
+                table: "ProductSizes",
+                column: "SizeID");
 
             migrationBuilder.CreateIndex(
                 name: "idx_SeasonDiscount_Title_Deleted",
@@ -331,13 +346,13 @@ namespace DataAccess.Migrations
                 name: "AdvertisementBanners");
 
             migrationBuilder.DropTable(
-                name: "ColorProduct");
+                name: "ProductColors");
 
             migrationBuilder.DropTable(
-                name: "ProductProductStatus");
+                name: "ProductProductStatuses");
 
             migrationBuilder.DropTable(
-                name: "ProductSize");
+                name: "ProductSizes");
 
             migrationBuilder.DropTable(
                 name: "Roles");

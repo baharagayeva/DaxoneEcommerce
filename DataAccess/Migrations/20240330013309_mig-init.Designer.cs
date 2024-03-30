@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DaxoneDbContext))]
-    [Migration("20240319131641_Initial")]
-    partial class Initial
+    [Migration("20240330013309_mig-init")]
+    partial class miginit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,21 +23,6 @@ namespace DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("ColorProduct", b =>
-                {
-                    b.Property<int>("ColorsID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductsID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ColorsID", "ProductsID");
-
-                    b.HasIndex("ProductsID");
-
-                    b.ToTable("ColorProduct");
-                });
 
             modelBuilder.Entity("Entities.Concrete.TableModels.AdvertisementBanner", b =>
                 {
@@ -190,6 +175,75 @@ namespace DataAccess.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.TableModels.ProductColor", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<int?>("ColorID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ColorID");
+
+                    b.HasIndex("ProductID");
+
+                    b.ToTable("ProductColors");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.TableModels.ProductProductStatus", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<int?>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductStatusID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("ProductStatusID");
+
+                    b.ToTable("ProductProductStatuses");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.TableModels.ProductSize", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<int?>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SizeID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("SizeID");
+
+                    b.ToTable("ProductSizes");
+                });
+
             modelBuilder.Entity("Entities.Concrete.TableModels.ProductStatus", b =>
                 {
                     b.Property<int>("ID")
@@ -203,17 +257,14 @@ namespace DataAccess.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(0);
 
-                    b.Property<string>("InStock")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsNew")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("New")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsStock")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("StockOut")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsStockOut")
+                        .HasColumnType("bit");
 
                     b.HasKey("ID");
 
@@ -394,51 +445,6 @@ namespace DataAccess.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ProductProductStatus", b =>
-                {
-                    b.Property<int>("ProductStatusesID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductsID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductStatusesID", "ProductsID");
-
-                    b.HasIndex("ProductsID");
-
-                    b.ToTable("ProductProductStatus");
-                });
-
-            modelBuilder.Entity("ProductSize", b =>
-                {
-                    b.Property<int>("ProductsID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SizesID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductsID", "SizesID");
-
-                    b.HasIndex("SizesID");
-
-                    b.ToTable("ProductSize");
-                });
-
-            modelBuilder.Entity("ColorProduct", b =>
-                {
-                    b.HasOne("Entities.Concrete.TableModels.Color", null)
-                        .WithMany()
-                        .HasForeignKey("ColorsID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Concrete.TableModels.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Entities.Concrete.TableModels.Product", b =>
                 {
                     b.HasOne("Entities.Concrete.TableModels.Category", "Category")
@@ -448,6 +454,51 @@ namespace DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.TableModels.ProductColor", b =>
+                {
+                    b.HasOne("Entities.Concrete.TableModels.Color", "Color")
+                        .WithMany("ProductColors")
+                        .HasForeignKey("ColorID");
+
+                    b.HasOne("Entities.Concrete.TableModels.Product", "Product")
+                        .WithMany("ProductColors")
+                        .HasForeignKey("ProductID");
+
+                    b.Navigation("Color");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.TableModels.ProductProductStatus", b =>
+                {
+                    b.HasOne("Entities.Concrete.TableModels.Product", "Product")
+                        .WithMany("ProductProductStatuses")
+                        .HasForeignKey("ProductID");
+
+                    b.HasOne("Entities.Concrete.TableModels.ProductStatus", "ProductStatus")
+                        .WithMany("ProductProductStatuses")
+                        .HasForeignKey("ProductStatusID");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("ProductStatus");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.TableModels.ProductSize", b =>
+                {
+                    b.HasOne("Entities.Concrete.TableModels.Product", "Product")
+                        .WithMany("ProductSizes")
+                        .HasForeignKey("ProductID");
+
+                    b.HasOne("Entities.Concrete.TableModels.Size", "Size")
+                        .WithMany("ProductSizes")
+                        .HasForeignKey("SizeID");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Size");
                 });
 
             modelBuilder.Entity("Entities.Concrete.TableModels.SubCategory", b =>
@@ -461,41 +512,35 @@ namespace DataAccess.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("ProductProductStatus", b =>
-                {
-                    b.HasOne("Entities.Concrete.TableModels.ProductStatus", null)
-                        .WithMany()
-                        .HasForeignKey("ProductStatusesID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Concrete.TableModels.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ProductSize", b =>
-                {
-                    b.HasOne("Entities.Concrete.TableModels.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Concrete.TableModels.Size", null)
-                        .WithMany()
-                        .HasForeignKey("SizesID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Entities.Concrete.TableModels.Category", b =>
                 {
                     b.Navigation("Products");
 
                     b.Navigation("SubCategories");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.TableModels.Color", b =>
+                {
+                    b.Navigation("ProductColors");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.TableModels.Product", b =>
+                {
+                    b.Navigation("ProductColors");
+
+                    b.Navigation("ProductProductStatuses");
+
+                    b.Navigation("ProductSizes");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.TableModels.ProductStatus", b =>
+                {
+                    b.Navigation("ProductProductStatuses");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.TableModels.Size", b =>
+                {
+                    b.Navigation("ProductSizes");
                 });
 #pragma warning restore 612, 618
         }

@@ -4,6 +4,7 @@ using Core.Helpers.Constants;
 using Core.Helpers.Results.Abstract;
 using Core.Helpers.Results.Concrete;
 using DataAccess.Abstract;
+using DataAccess.UnitOfWork;
 using Entities.Concrete.DTOs.ColorDTOs;
 using Entities.Concrete.DTOs.ProductDTOs;
 using Entities.Concrete.TableModels;
@@ -23,12 +24,14 @@ namespace Business.Concrete
         private readonly IProductDAL _productDAL;
         private readonly IValidator<Product> _validationRules;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWorks _unitOfWorks;
 
-        public ProductManager(IProductDAL productDAL, IValidator<Product> validationRules, IMapper mapper)
+        public ProductManager(IProductDAL productDAL, IValidator<Product> validationRules, IMapper mapper,IUnitOfWorks unitOfWorks)
         {
             _productDAL = productDAL;
             _validationRules = validationRules;
             _mapper = mapper;
+            _unitOfWorks = unitOfWorks;
         }
         public IDataResult<List<string>> Add(ProductGetViewModel addToProductDTO)
         {
@@ -39,6 +42,7 @@ namespace Business.Concrete
                 return new ErrorDataResult<List<string>>(result.Errors.Select(x => x.PropertyName).ToList(), result.Errors.Select(x => x.ErrorMessage).ToList());
             }
             _productDAL.AddWithProduct(addToProductDTO);
+            _unitOfWorks.SaveChange();
             return new SuccessDataResult<List<string>>(null, CommonOperationMessages.DataAddedSuccessfully);
         }
 

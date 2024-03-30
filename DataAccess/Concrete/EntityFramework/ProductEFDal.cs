@@ -57,6 +57,8 @@ namespace DataAccess.Concrete.EntityFramework
                     ProductStatusID = item
                 });
 
+
+
             }
             _context.Products.Add(Product);
         }
@@ -78,6 +80,13 @@ namespace DataAccess.Concrete.EntityFramework
                               Price = p.Price,
                               Model = p.Model,
                               StockCount = p.StockCount,
+                              Category = (from c in _context.Categories
+                                          where c.ID == p.CategoryID
+                                          select new Category
+                                          {
+                                              ID = c.ID,
+                                              Name = c.Name
+                                          }).FirstOrDefault(),
                               ProductSizes = (from ps in _context.ProductSizes
                                               join size in _context.Sizes on ps.SizeID equals size.ID
                                               where ps.ProductID == p.ID
@@ -141,6 +150,14 @@ namespace DataAccess.Concrete.EntityFramework
                               Price = p.Price,
                               Model = p.Model,
                               StockCount = p.StockCount,
+                              Category = (from c in _context.Categories
+                                          where c.ID == p.CategoryID
+                                          select new Category
+                                          {
+                                              ID = c.ID,
+                                              Name = c.Name
+                                          }).FirstOrDefault(),
+
                               ProductSizes = (from ps in _context.ProductSizes
                                               where ps.ProductID == p.ID
                                               select new ProductSize
