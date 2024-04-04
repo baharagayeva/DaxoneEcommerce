@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "VCT0UNSDDZW8+vYUuPkfqA5zSCHv2an6v9Y5tanrtIQt35HpCqJRTxRlqDv8s0LXCOtbOZQZ/feTYA923WzvrQ==",
+  "dgSpecHash": "4/1EhgLApDw2vAqun+DSb+smjme4meGd9Psz25abHzIcX1xDKmtznrwIqF8/3LrR1pFe59TB/EzeOa9QfTBU+Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\User\\Desktop\\DaxoneEcommerce\\Entities\\Entities.csproj",
+  "projectFilePath": "C:\\Users\\User\\Documents\\Codelandiya\\DaxoneEcommerceApi\\Entities\\Entities.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\User\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\6.0.25\\microsoft.aspnetcore.cryptography.internal.6.0.25.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\6.0.25\\microsoft.aspnetcore.cryptography.keyderivation.6.0.25.nupkg.sha512",
