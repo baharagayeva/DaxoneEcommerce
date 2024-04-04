@@ -20,14 +20,5 @@ namespace DataAccess.Concrete.EntityFramework
             _context = context;
         }
 
-        public Size GetAll(Expression<Func<Size, bool>> predicate = null)
-        {
-
-            return predicate is null
-                  ?
-                   _context.Set<Size>().Include(x => x.Products).FirstOrDefault()
-                  :
-                  _context.Set<Size>().Include(x => x.Products).FirstOrDefault(predicate);
-        }
     }
 }

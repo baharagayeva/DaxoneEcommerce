@@ -11,5 +11,12 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class AdvertisementBannerEFDal : RepositoryBase<AdvertisementBanner, DaxoneDbContext>, IAdvertisementBannerDAL
     {
+        private readonly DaxoneDbContext _context;
+
+        public AdvertisementBannerEFDal(DaxoneDbContext context) 
+        {
+            _context = context;
+        }
+
     }
 }

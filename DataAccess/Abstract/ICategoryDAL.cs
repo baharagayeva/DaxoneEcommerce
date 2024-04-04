@@ -11,6 +11,6 @@ namespace DataAccess.Abstract
 {
     public interface ICategoryDAL : IRepository<Category>
     {
-        Category GetAllDATA(Expression<Func<Category, bool>> predicate = null);
+        Category GetCategory(Expression<Func<Category, bool>> predicate = null);
     }
 }

@@ -11,6 +11,6 @@ namespace DataAccess.Abstract
 {
     public interface IColorDAL : IRepository<Color>
     {
-        Color GetAll(Expression<Func<Color, bool>> predicate = null);
+
     }
 }

@@ -20,14 +20,5 @@ namespace DataAccess.Concrete.EntityFramework
             _context = context;
         }
 
-        public Color GetAll(Expression<Func<Color, bool>> predicate = null)
-        {
-
-            return predicate is null
-                  ?
-                   _context.Set<Color>().Include(x => x.Products).FirstOrDefault()
-                  :
-                  _context.Set<Color>().Include(x => x.Products).FirstOrDefault(predicate);
-        }
     }
 }

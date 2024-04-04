@@ -4,6 +4,7 @@ using Core.Helpers.Results.Abstract;
 using Core.Helpers.Results.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete.TableModels;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,19 @@ namespace Business.Concrete
     public class AdvertisementBannerManager : IAdvertisementBannerService
     {
         private readonly IAdvertisementBannerDAL _advertisementBannerDAL;
-        public AdvertisementBannerManager(IAdvertisementBannerDAL advertisementBannerDAL)
+        private readonly IValidator<AdvertisementBanner> _validationRules;
+        public AdvertisementBannerManager(IAdvertisementBannerDAL advertisementBannerDAL, IValidator<AdvertisementBanner> validationRules)
         {
             _advertisementBannerDAL = advertisementBannerDAL;
+            _validationRules = validationRules;
         }
         public IDataResult<List<string>> Add(AdvertisementBanner advertisementBanner)
         {
+            var result = _validationRules.Validate(advertisementBanner);
+            if (!result.IsValid)
+            {
+                return new ErrorDataResult<List<string>>(result.Errors.Select(x => x.PropertyName).ToList(), result.Errors.Select(x => x.ErrorMessage).ToList());
+            }
             _advertisementBannerDAL.Add(advertisementBanner);
             return new SuccessDataResult<List<string>>(null, CommonOperationMessages.DataAddedSuccessfully);
         }
@@ -33,7 +41,9 @@ namespace Business.Concrete
 
         public IDataResult<List<AdvertisementBanner>> GetAll()
         {
-            return new SuccessDataResult<List<AdvertisementBanner>>(_advertisementBannerDAL.GetAll(x => x.Deleted == 0));
+            var data = _advertisementBannerDAL.GetAll(x => x.Deleted == 0);
+            data.Reverse();
+            return new SuccessDataResult<List<AdvertisementBanner>>(data);
         }
 
         public IDataResult<AdvertisementBanner> GetById(int id)
@@ -43,6 +53,11 @@ namespace Business.Concrete
 
         public IDataResult<List<string>> Update(AdvertisementBanner advertisementBanner)
         {
+            var result = _validationRules.Validate(advertisementBanner);
+            if (!result.IsValid)
+            {
+                return new ErrorDataResult<List<string>>(result.Errors.Select(x => x.PropertyName).ToList(), result.Errors.Select(x => x.ErrorMessage).ToList());
+            }
             _advertisementBannerDAL.Update(advertisementBanner);
             return new SuccessDataResult<List<string>>(null, CommonOperationMessages.DataUpdatedSuccessfully);
         }

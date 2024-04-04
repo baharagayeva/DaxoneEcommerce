@@ -10,8 +10,11 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class DaxoneDbContext : IdentityDbContext<User, Role, int>
+    public class DaxoneDbContext : DbContext
     {
+        //public DaxoneDbContext(DbContextOptions<DaxoneDbContext> dbContextOptions) : base(dbContextOptions)
+        //{ 
+        //}
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=DaxoneDb;Integrated Security=True");
@@ -33,5 +36,8 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<Size> Sizes { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<ProductSize> ProductSizes { get; set; }
+        public DbSet<ProductColor> ProductColors { get; set; }
+        public DbSet<ProductProductStatus> ProductProductStatuses { get; set; }
     }
 }

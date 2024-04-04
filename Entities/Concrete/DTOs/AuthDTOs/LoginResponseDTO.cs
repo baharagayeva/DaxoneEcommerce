@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.Concrete.ViewModels
+namespace Entities.Concrete.DTOs.AuthDTOs
 {
-    public class HomeViewModel
+    public class LoginResponseDTO
     {
+        public string JwtToken { get; set; }
     }
 }

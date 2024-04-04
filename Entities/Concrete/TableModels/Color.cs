@@ -11,7 +11,6 @@ namespace Entities.Concrete.TableModels
     {
         public string Name { get; set; }
         public string ColorCode { get; set; }
-
-        public List<Product> Products { get; set; }
+        public ICollection<ProductColor> ProductColors { get; set; } = new List<ProductColor>();
     }
 }

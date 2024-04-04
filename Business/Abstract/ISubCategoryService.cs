@@ -1,4 +1,5 @@
 ﻿using Core.Helpers.Results.Abstract;
+using Entities.Concrete.DTOs.SubCategoryDTOs;
 using Entities.Concrete.TableModels;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,10 @@ namespace Business.Abstract
 {
     public interface ISubCategoryService
     {
-        IDataResult<List<string>> Add(SubCategory subCategory);
+        IDataResult<List<string>> Add(AddToSubCategoryDTO addToSubCategoryDTO);
         IResult Delete(SubCategory subCategory);
-        IDataResult<List<string>> Update(SubCategory subCategory);
+        IDataResult<List<string>> Update(UpdateToSubCategoryDTO updateToSubCategoryDTO);
         IDataResult<SubCategory> GetById(int id);
-        IDataResult<List<SubCategory>> GetAll();
+        IDataResult<List<ListToSubCategoryDTO>> GetAll();
     }
 }
